@@ -37,7 +37,8 @@ namespace WorkingWithProjects.API.Controllers
         {
             var projects = _projectRepository.GetAllProjects().ToList();
             var result = _mapper.Map<List<ProjectViewModel>>(projects);
-            result = MappingForProjectViewModel(result);
+
+            MappingForProjectViewModel(result);
 
             return Ok(result);
         }
@@ -45,6 +46,11 @@ namespace WorkingWithProjects.API.Controllers
         [HttpGet("{id}")]
         public IActionResult GetEmployeeById(int id)
         {
+            var projects = _projectRepository.GetProjectById(id);
+            var result = _mapper.Map<ProjectViewModel>(projects);
+
+            MappingForProjectViewModel(new List<ProjectViewModel> { result });
+
             return Ok(_projectRepository.GetProjectById(id));
         }
 
