@@ -4,6 +4,7 @@
     {
         Student,
         Administrator,
-        Teacher
+        Teacher,
+        Parent
     }
 }

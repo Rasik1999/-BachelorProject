@@ -1,8 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using WorkingWithProjects.DATA;
 
 namespace WorkingWithProjects.API.Models
@@ -18,12 +14,13 @@ namespace WorkingWithProjects.API.Models
         public DbSet<Project> Projects { get; set; }
         public DbSet<Progress> Progresses { get; set; }
         public DbSet<KindOfProject> KindsOfProject { get; set; }
+        public DbSet<Hashtag> Hashtags { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-            //seed categories
+            //seed data
             modelBuilder.Entity<KindOfProject>().HasData(new KindOfProject { KindOfProjectId = 1, Name = "TestName1" });
             modelBuilder.Entity<KindOfProject>().HasData(new KindOfProject { KindOfProjectId = 2, Name = "TestName2" });
             modelBuilder.Entity<KindOfProject>().HasData(new KindOfProject { KindOfProjectId = 3, Name = "TestName3" });

@@ -10,6 +10,8 @@
 
         public string Photo { get; set; }
 
+        public string HashtagIds { get; set; }
+
         public int KindOfProjectId { get; set; }
         public KindOfProject KindOfProject { get; set; }
 
