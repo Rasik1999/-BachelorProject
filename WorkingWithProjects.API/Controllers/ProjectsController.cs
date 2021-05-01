@@ -51,7 +51,7 @@ namespace WorkingWithProjects.API.Controllers
 
             MappingForProjectViewModel(new List<ProjectViewModel> { result });
 
-            return Ok(_projectRepository.GetProjectById(id));
+            return Ok(result);
         }
 
         private List<ProjectViewModel> MappingForProjectViewModel(List<ProjectViewModel> projectViewModels)
