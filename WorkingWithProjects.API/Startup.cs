@@ -27,6 +27,9 @@ namespace WorkingWithProjects.API
             services.AddScoped<IProgressRepository, ProgressRepository>();
             services.AddScoped<IProjectRepository, ProjectRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IHashtagRepository, HashtagRepository>();
+
+            services.AddAutoMapper(typeof(ProjectProfile));
 
             services.AddControllers();
         }
