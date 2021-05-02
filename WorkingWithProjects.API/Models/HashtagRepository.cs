@@ -22,13 +22,15 @@ namespace WorkingWithProjects.API.Models
             return addedHashtag.Entity;
         }
 
-        public void DeleteHashtag(int hashtagId)
+        public Hashtag DeleteHashtag(int hashtagId)
         {
             var foundedHashtag = _context.Hashtags.FirstOrDefault(e => e.HashtagId == hashtagId);
-            if (foundedHashtag == null) return;
+            if (foundedHashtag == null) return null;
 
-            _context.Hashtags.Remove(foundedHashtag);
+            var deletedHashtag = _context.Hashtags.Remove(foundedHashtag);
             _context.SaveChanges();
+
+            return deletedHashtag.Entity;
         }
 
         public IEnumerable<Hashtag> GetAllHashtags()

@@ -10,6 +10,6 @@ namespace WorkingWithProjects.API.Models
         Hashtag GetHashtagById(int hashtagId);
         Hashtag AddHashtag(Hashtag hashtag);
         Hashtag UpdateHashtag(Hashtag hashtag);
-        void DeleteHashtag(int hashtagId);
+        Hashtag DeleteHashtag(int hashtagId);
     }
 }
