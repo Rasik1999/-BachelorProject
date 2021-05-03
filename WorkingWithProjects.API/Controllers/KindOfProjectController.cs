@@ -29,5 +29,11 @@ namespace WorkingWithProjects.API.Controllers
         {
             return _kindOfProjectRepository.GetKindById(id);
         }
+
+        [HttpPut("roletokind/{roleid},{kindid}")]
+        public bool PutRoleToKind(int roleid, int kindid)
+        {
+            return _kindOfProjectRepository.CreateRelationship(roleid, kindid);
+        }
     }
 }
