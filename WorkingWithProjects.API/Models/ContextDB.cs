@@ -15,18 +15,22 @@ namespace WorkingWithProjects.API.Models
         public DbSet<Progress> Progresses { get; set; }
         public DbSet<KindOfProject> KindsOfProject { get; set; }
         public DbSet<Hashtag> Hashtags { get; set; }
+        public DbSet<Role> Roles { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
             //seed data
-            modelBuilder.Entity<KindOfProject>().HasData(new KindOfProject { KindOfProjectId = 1, Name = "TestName1" });
-            modelBuilder.Entity<KindOfProject>().HasData(new KindOfProject { KindOfProjectId = 2, Name = "TestName2" });
+            modelBuilder.Entity<Role>().HasData(new Role { RoleId = 1, Name = "Student" });
+            modelBuilder.Entity<Role>().HasData(new Role { RoleId = 2, Name = "Administrator" });
+
+            modelBuilder.Entity<KindOfProject>().HasData(new KindOfProject { KindOfProjectId = 1, Name = "TestName1"});
+            modelBuilder.Entity<KindOfProject>().HasData(new KindOfProject { KindOfProjectId = 2, Name = "TestName2"});
             modelBuilder.Entity<KindOfProject>().HasData(new KindOfProject { KindOfProjectId = 3, Name = "TestName3" });
 
-            modelBuilder.Entity<User>().HasData(new User { UserId = 1, LastName = "Yagon", FirstName = "Don" });
-            modelBuilder.Entity<User>().HasData(new User { UserId = 2, LastName = "Yasha", FirstName = "Lava" });
+            modelBuilder.Entity<User>().HasData(new User { UserId = 1, LastName = "Yagon", FirstName = "Don", RolesId = 1 });
+            modelBuilder.Entity<User>().HasData(new User { UserId = 2, LastName = "Yasha", FirstName = "Lava", RolesId = 2 });
 
             modelBuilder.Entity<Hashtag>().HasData(new Hashtag { HashtagId = 1, Name = "HashtagName1" });
             modelBuilder.Entity<Hashtag>().HasData(new Hashtag { HashtagId = 2, Name = "HashtagName2" });

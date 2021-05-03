@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Linq;
 using WorkingWithProjects.API.Models;
 using WorkingWithProjects.API.Models.ViewModel;
-using WorkingWithProjects.DATA;
 
 namespace WorkingWithProjects.API.Controllers
 {

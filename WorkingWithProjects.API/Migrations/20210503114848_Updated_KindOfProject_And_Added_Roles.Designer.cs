@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WorkingWithProjects.API.Models;
 
 namespace WorkingWithProjects.API.Migrations
 {
     [DbContext(typeof(ContextDB))]
-    partial class ContextDBModelSnapshot : ModelSnapshot
+    [Migration("20210503114848_Updated_KindOfProject_And_Added_Roles")]
+    partial class Updated_KindOfProject_And_Added_Roles
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -61,7 +63,12 @@ namespace WorkingWithProjects.API.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("RoleId")
+                        .HasColumnType("int");
+
                     b.HasKey("KindOfProjectId");
+
+                    b.HasIndex("RoleId");
 
                     b.ToTable("KindsOfProject");
 
@@ -69,17 +76,20 @@ namespace WorkingWithProjects.API.Migrations
                         new
                         {
                             KindOfProjectId = 1,
-                            Name = "TestName1"
+                            Name = "TestName1",
+                            RoleId = 1
                         },
                         new
                         {
                             KindOfProjectId = 2,
-                            Name = "TestName2"
+                            Name = "TestName2",
+                            RoleId = 2
                         },
                         new
                         {
                             KindOfProjectId = 3,
-                            Name = "TestName3"
+                            Name = "TestName3",
+                            RoleId = 0
                         });
                 });
 
@@ -184,7 +194,7 @@ namespace WorkingWithProjects.API.Migrations
 
             modelBuilder.Entity("WorkingWithProjects.DATA.Role", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("RoleId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -192,19 +202,19 @@ namespace WorkingWithProjects.API.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                    b.HasKey("RoleId");
 
                     b.ToTable("Roles");
 
                     b.HasData(
                         new
                         {
-                            Id = 1,
+                            RoleId = 1,
                             Name = "Student"
                         },
                         new
                         {
-                            Id = 2,
+                            RoleId = 2,
                             Name = "Administrator"
                         });
                 });
@@ -231,9 +241,6 @@ namespace WorkingWithProjects.API.Migrations
                     b.Property<int?>("RoleId")
                         .HasColumnType("int");
 
-                    b.Property<int>("RolesId")
-                        .HasColumnType("int");
-
                     b.HasKey("UserId");
 
                     b.HasIndex("RoleId");
@@ -246,17 +253,26 @@ namespace WorkingWithProjects.API.Migrations
                             UserId = 1,
                             BirthDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FirstName = "Don",
-                            LastName = "Yagon",
-                            RolesId = 1
+                            LastName = "Yagon"
                         },
                         new
                         {
                             UserId = 2,
                             BirthDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FirstName = "Lava",
-                            LastName = "Yasha",
-                            RolesId = 2
+                            LastName = "Yasha"
                         });
+                });
+
+            modelBuilder.Entity("WorkingWithProjects.DATA.KindOfProject", b =>
+                {
+                    b.HasOne("WorkingWithProjects.DATA.Role", "Role")
+                        .WithMany("KindOfProjects")
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Role");
                 });
 
             modelBuilder.Entity("WorkingWithProjects.DATA.Progress", b =>
@@ -292,7 +308,7 @@ namespace WorkingWithProjects.API.Migrations
             modelBuilder.Entity("WorkingWithProjects.DATA.User", b =>
                 {
                     b.HasOne("WorkingWithProjects.DATA.Role", "Role")
-                        .WithMany("Users")
+                        .WithMany()
                         .HasForeignKey("RoleId");
 
                     b.Navigation("Role");
@@ -310,7 +326,7 @@ namespace WorkingWithProjects.API.Migrations
 
             modelBuilder.Entity("WorkingWithProjects.DATA.Role", b =>
                 {
-                    b.Navigation("Users");
+                    b.Navigation("KindOfProjects");
                 });
 
             modelBuilder.Entity("WorkingWithProjects.DATA.User", b =>

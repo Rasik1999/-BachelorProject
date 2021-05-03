@@ -17,6 +17,8 @@ namespace WorkingWithProjects.DATA
 
         public List<Project> Projects { get; set; } = new List<Project>();
 
-        public Roles Role { get; set; }
+        public int RolesId { get; set; }
+
+        public Role Role { get; set; }
     }
 }
