@@ -13,6 +13,17 @@ namespace WorkingWithProjects.API.Models
             _context = context;
         }
 
+        public Progress CreateProgress(int projectId)
+        {
+            Progress newProgress = new Progress() { ProjectId = projectId };
+
+            var result = _context.Progresses.Add(newProgress).Entity;
+
+            _context.SaveChanges();
+
+            return result;
+        }
+
         public IEnumerable<Progress> GetAllProgress()
         {
             return _context.Progresses;
@@ -32,7 +43,11 @@ namespace WorkingWithProjects.API.Models
         {
             _context.Progresses.Update(progress);
 
-            return _context.Progresses.Update(progress).Entity;
+            var result = _context.Progresses.Update(progress).Entity;
+
+            _context.SaveChanges();
+
+            return result;
         }
     }
 }

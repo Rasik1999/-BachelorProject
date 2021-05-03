@@ -20,13 +20,15 @@ namespace WorkingWithProjects.API.Models
             return addedEntity.Entity;
         }
 
-        public void DeleteProject(int projectId)
+        public Project DeleteProject(int projectId)
         {
             var foundedProject = _context.Projects.FirstOrDefault(e => e.ProjectId == projectId);
-            if (foundedProject == null) return;
+            if (foundedProject == null) return null;
 
-            _context.Projects.Remove(foundedProject);
+            var result = _context.Projects.Remove(foundedProject);
             _context.SaveChanges();
+
+            return result.Entity;
         }
 
         public IEnumerable<Project> GetAllProjects()

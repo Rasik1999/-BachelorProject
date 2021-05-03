@@ -50,5 +50,11 @@ namespace WorkingWithProjects.API.Controllers
         {
             return _roleRepository.DeleteRole(id);
         }
+
+        [HttpPut("roletokind/{roleid},{kindid}")]
+        public bool PutRoleToKind(int roleid, int kindid)
+        {
+            return _roleRepository.CreateRelationship(roleid, kindid);
+        }
     }
 }

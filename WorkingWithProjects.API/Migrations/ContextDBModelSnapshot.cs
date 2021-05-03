@@ -19,6 +19,21 @@ namespace WorkingWithProjects.API.Migrations
                 .HasAnnotation("ProductVersion", "5.0.5")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("KindOfProjectRole", b =>
+                {
+                    b.Property<int>("KindOfProjectsKindOfProjectId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RolesRoleId")
+                        .HasColumnType("int");
+
+                    b.HasKey("KindOfProjectsKindOfProjectId", "RolesRoleId");
+
+                    b.HasIndex("RolesRoleId");
+
+                    b.ToTable("KindOfProjectRole");
+                });
+
             modelBuilder.Entity("WorkingWithProjects.DATA.Hashtag", b =>
                 {
                     b.Property<int>("HashtagId")
@@ -184,7 +199,7 @@ namespace WorkingWithProjects.API.Migrations
 
             modelBuilder.Entity("WorkingWithProjects.DATA.Role", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("RoleId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -192,19 +207,19 @@ namespace WorkingWithProjects.API.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                    b.HasKey("RoleId");
 
                     b.ToTable("Roles");
 
                     b.HasData(
                         new
                         {
-                            Id = 1,
+                            RoleId = 1,
                             Name = "Student"
                         },
                         new
                         {
-                            Id = 2,
+                            RoleId = 2,
                             Name = "Administrator"
                         });
                 });
@@ -257,6 +272,21 @@ namespace WorkingWithProjects.API.Migrations
                             LastName = "Yasha",
                             RolesId = 2
                         });
+                });
+
+            modelBuilder.Entity("KindOfProjectRole", b =>
+                {
+                    b.HasOne("WorkingWithProjects.DATA.KindOfProject", null)
+                        .WithMany()
+                        .HasForeignKey("KindOfProjectsKindOfProjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("WorkingWithProjects.DATA.Role", null)
+                        .WithMany()
+                        .HasForeignKey("RolesRoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("WorkingWithProjects.DATA.Progress", b =>

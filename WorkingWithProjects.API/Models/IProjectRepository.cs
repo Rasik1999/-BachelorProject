@@ -10,6 +10,6 @@ namespace WorkingWithProjects.API.Models
         Project GetProjectsByUserId(int userId);
         Project AddProject(Project project);
         Project UpdateProject(Project project);
-        void DeleteProject(int projectId);
+        Project DeleteProject(int projectId);
     }
 }

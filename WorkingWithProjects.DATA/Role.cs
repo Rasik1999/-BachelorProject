@@ -9,5 +9,8 @@ namespace WorkingWithProjects.DATA
         public string Name { get; set; }
 
         public List<User> Users { get; set; } = new List<User>();
+
+        public List<KindOfProject> KindOfProjects { get; set; } = new List<KindOfProject>();
+
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using WorkingWithProjects.DATA;
 
@@ -13,9 +14,35 @@ namespace WorkingWithProjects.API.Models
             _context = context;
         }
 
+        public bool CreateRelationship(int roleId, int kindId)
+        {
+            try
+            {
+                KindOfProject kind = _context.KindsOfProject.Where(x => x.KindOfProjectId == kindId).FirstOrDefault();
+                Role role = _context.Roles.Where(x => x.RoleId == roleId).FirstOrDefault();
+
+                kind.Roles.Add(role);
+
+                _context.KindsOfProject.Update(kind);
+
+                _context.SaveChanges();
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
         public IEnumerable<KindOfProject> GetAllKinds()
         {
             return _context.KindsOfProject;
+        }
+
+        public IEnumerable<KindOfProject> GetAllKindsForRole(int roleId)
+        {
+            return _context.KindsOfProject.Where(x => x.Roles.Where(y => y.RoleId == roleId) != null);
         }
 
         public KindOfProject GetKindById(int kindId)

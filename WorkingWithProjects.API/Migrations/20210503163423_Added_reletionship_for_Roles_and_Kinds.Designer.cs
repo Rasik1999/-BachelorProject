@@ -10,8 +10,8 @@ using WorkingWithProjects.API.Models;
 namespace WorkingWithProjects.API.Migrations
 {
     [DbContext(typeof(ContextDB))]
-    [Migration("20210503115531_Updated_KindOfProject_And_Users")]
-    partial class Updated_KindOfProject_And_Users
+    [Migration("20210503163423_Added_reletionship_for_Roles_and_Kinds")]
+    partial class Added_reletionship_for_Roles_and_Kinds
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -20,6 +20,21 @@ namespace WorkingWithProjects.API.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.5")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("KindOfProjectRole", b =>
+                {
+                    b.Property<int>("KindOfProjectsKindOfProjectId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RolesRoleId")
+                        .HasColumnType("int");
+
+                    b.HasKey("KindOfProjectsKindOfProjectId", "RolesRoleId");
+
+                    b.HasIndex("RolesRoleId");
+
+                    b.ToTable("KindOfProjectRole");
+                });
 
             modelBuilder.Entity("WorkingWithProjects.DATA.Hashtag", b =>
                 {
@@ -230,7 +245,10 @@ namespace WorkingWithProjects.API.Migrations
                     b.Property<string>("LastName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("RoleId")
+                    b.Property<int?>("RoleId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RolesId")
                         .HasColumnType("int");
 
                     b.HasKey("UserId");
@@ -246,7 +264,7 @@ namespace WorkingWithProjects.API.Migrations
                             BirthDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FirstName = "Don",
                             LastName = "Yagon",
-                            RoleId = 1
+                            RolesId = 1
                         },
                         new
                         {
@@ -254,8 +272,23 @@ namespace WorkingWithProjects.API.Migrations
                             BirthDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FirstName = "Lava",
                             LastName = "Yasha",
-                            RoleId = 2
+                            RolesId = 2
                         });
+                });
+
+            modelBuilder.Entity("KindOfProjectRole", b =>
+                {
+                    b.HasOne("WorkingWithProjects.DATA.KindOfProject", null)
+                        .WithMany()
+                        .HasForeignKey("KindOfProjectsKindOfProjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("WorkingWithProjects.DATA.Role", null)
+                        .WithMany()
+                        .HasForeignKey("RolesRoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("WorkingWithProjects.DATA.Progress", b =>
@@ -292,9 +325,7 @@ namespace WorkingWithProjects.API.Migrations
                 {
                     b.HasOne("WorkingWithProjects.DATA.Role", "Role")
                         .WithMany("Users")
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("RoleId");
 
                     b.Navigation("Role");
                 });

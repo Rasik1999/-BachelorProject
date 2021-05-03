@@ -10,5 +10,6 @@ namespace WorkingWithProjects.API.Models
         Role AddRole(Role role);
         Role UpdateRole(Role role);
         Role DeleteRole(int roleId);
+        bool CreateRelationship(int roleId, int kindId);
     }
 }
