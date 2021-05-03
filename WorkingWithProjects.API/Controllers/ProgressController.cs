@@ -29,5 +29,22 @@ namespace WorkingWithProjects.API.Controllers
         {
             return _progressRepository.GetProgressById(id);
         }
+
+        // GET api/<ProgressController>/ByProjectId5
+        [HttpGet("byprojectid/{id}")]
+        public Progress GetByProjectId(int id)
+        {
+            return _progressRepository.GetProgressByProjectId(id);
+        }
+
+        // GET api/<ProgressController>/5
+        [HttpPut("projectId")]
+        public Progress Put(int projectId, [FromBody] decimal value)
+        {
+            var project = _progressRepository.GetProgressByProjectId(projectId);
+            project.Value += value;
+
+            return _progressRepository.UpdateProgress(project);
+        }
     }
 }

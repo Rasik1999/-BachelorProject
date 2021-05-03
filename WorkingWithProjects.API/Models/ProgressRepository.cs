@@ -27,5 +27,12 @@ namespace WorkingWithProjects.API.Models
         {
             return _context.Progresses.FirstOrDefault(x => x.ProjectId == projectId);
         }
+
+        public Progress UpdateProgress(Progress progress)
+        {
+            _context.Progresses.Update(progress);
+
+            return _context.Progresses.Update(progress).Entity;
+        }
     }
 }

@@ -8,5 +8,6 @@ namespace WorkingWithProjects.API.Models
         IEnumerable<Progress> GetAllProgress();
         Progress GetProgressById(int progressId);
         Progress GetProgressByProjectId(int projectId);
+        Progress UpdateProgress(Progress progress);
     }
 }
