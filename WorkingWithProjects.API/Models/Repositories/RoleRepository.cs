@@ -67,7 +67,7 @@ namespace WorkingWithProjects.API.Models
                 KindOfProject kind = _context.KindsOfProject.Where(x => x.KindOfProjectId == kindId).FirstOrDefault();
                 Role role = _context.Roles.Where(x => x.RoleId == roleId).FirstOrDefault();
 
-                role.KindOfProjects.Add(kind);
+                role.KindOfProjectRoles.Add(new KindOfProjectRole() { KindId = kind.KindOfProjectId, RoleId = role.RoleId });
 
                 _context.Roles.Update(role);
 

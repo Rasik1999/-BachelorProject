@@ -21,12 +21,23 @@ namespace WorkingWithProjects.API.Models
         {
             base.OnModelCreating(modelBuilder);
 
+            modelBuilder.Entity<KindOfProjectRole>()
+                .HasKey(bc => new { bc.KindId, bc.RoleId });
+            modelBuilder.Entity<KindOfProjectRole>()
+                .HasOne(bc => bc.KindOfProject)
+                .WithMany(b => b.KindOfProjectRoles)
+                .HasForeignKey(bc => bc.KindId);
+            modelBuilder.Entity<KindOfProjectRole>()
+                .HasOne(bc => bc.Role)
+                .WithMany(c => c.KindOfProjectRoles)
+                .HasForeignKey(bc => bc.RoleId);
+
             //seed data
             modelBuilder.Entity<Role>().HasData(new Role { RoleId = 1, Name = "Student" });
             modelBuilder.Entity<Role>().HasData(new Role { RoleId = 2, Name = "Administrator" });
 
-            modelBuilder.Entity<KindOfProject>().HasData(new KindOfProject { KindOfProjectId = 1, Name = "TestName1"});
-            modelBuilder.Entity<KindOfProject>().HasData(new KindOfProject { KindOfProjectId = 2, Name = "TestName2"});
+            modelBuilder.Entity<KindOfProject>().HasData(new KindOfProject { KindOfProjectId = 1, Name = "TestName1" });
+            modelBuilder.Entity<KindOfProject>().HasData(new KindOfProject { KindOfProjectId = 2, Name = "TestName2" });
             modelBuilder.Entity<KindOfProject>().HasData(new KindOfProject { KindOfProjectId = 3, Name = "TestName3" });
 
             modelBuilder.Entity<User>().HasData(new User { UserId = 1, LastName = "Yagon", FirstName = "Don", RolesId = 1 });

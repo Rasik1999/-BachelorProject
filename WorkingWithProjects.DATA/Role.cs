@@ -10,7 +10,7 @@ namespace WorkingWithProjects.DATA
 
         public List<User> Users { get; set; } = new List<User>();
 
-        public List<KindOfProject> KindOfProjects { get; set; } = new List<KindOfProject>();
+        public List<KindOfProjectRole> KindOfProjectRoles { get; set; } = new List<KindOfProjectRole>();
 
     }
 }

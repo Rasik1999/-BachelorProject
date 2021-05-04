@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using WorkingWithProjects.API.Helpers;
 using WorkingWithProjects.API.Models;
+using WorkingWithProjects.API.ViewModels;
 using WorkingWithProjects.DATA;
 
 namespace WorkingWithProjects.API.Controllers
@@ -10,10 +12,12 @@ namespace WorkingWithProjects.API.Controllers
     public class KindOfProjectController : ControllerBase
     {
         private readonly IKindOfProjectRepository _kindOfProjectRepository;
+        private readonly IRoleKindMappingHelper _mappingHelper;
 
-        public KindOfProjectController(IKindOfProjectRepository kindOfProjectRepository)
+        public KindOfProjectController(IKindOfProjectRepository kindOfProjectRepository, IRoleKindMappingHelper mappingHelper)
         {
             _kindOfProjectRepository = kindOfProjectRepository;
+            _mappingHelper = mappingHelper;
         }
 
         // GET: api/<KindOfProjectController>
@@ -30,10 +34,16 @@ namespace WorkingWithProjects.API.Controllers
             return _kindOfProjectRepository.GetKindById(id);
         }
 
-        [HttpPut("roletokind/{roleid},{kindid}")]
+        [HttpPut("connectroletokind/{roleid},{kindid}")]
         public bool PutRoleToKind(int roleid, int kindid)
         {
             return _kindOfProjectRepository.CreateRelationship(roleid, kindid);
+        }
+
+        [HttpGet("showallroletokind")]
+        public List<RoleKindViewModel> ShowAllRoleToKind()
+        {
+            return _mappingHelper.MapToListRoleKindView();
         }
     }
 }

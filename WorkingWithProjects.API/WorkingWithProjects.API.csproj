@@ -5,6 +5,20 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20210501115216_InitialCreate.cs" />
+    <Compile Remove="Migrations\20210501115216_InitialCreate.Designer.cs" />
+    <Compile Remove="Migrations\20210501120130_AddedHashtags.cs" />
+    <Compile Remove="Migrations\20210501120130_AddedHashtags.Designer.cs" />
+    <Compile Remove="Migrations\20210501120935_Added_PercentageOfCompletion_for_Progress_table.cs" />
+    <Compile Remove="Migrations\20210501120935_Added_PercentageOfCompletion_for_Progress_table.Designer.cs" />
+    <Compile Remove="Migrations\20210503114848_Updated_KindOfProject_And_Added_Roles.cs" />
+    <Compile Remove="Migrations\20210503114848_Updated_KindOfProject_And_Added_Roles.Designer.cs" />
+    <Compile Remove="Migrations\20210503115531_Updated_KindOfProject_And_Users.cs" />
+    <Compile Remove="Migrations\20210503163423_Added_reletionship_for_Roles_and_Kinds.cs" />
+    <Compile Remove="Migrations\20210503163423_Added_reletionship_for_Roles_and_Kinds.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\WorkingWithProjects.DATA\WorkingWithProjects.DATA.csproj" />
   </ItemGroup>
 

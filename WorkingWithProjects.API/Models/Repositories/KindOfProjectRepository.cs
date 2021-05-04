@@ -21,7 +21,7 @@ namespace WorkingWithProjects.API.Models
                 KindOfProject kind = _context.KindsOfProject.Where(x => x.KindOfProjectId == kindId).FirstOrDefault();
                 Role role = _context.Roles.Where(x => x.RoleId == roleId).FirstOrDefault();
 
-                kind.Roles.Add(role);
+                kind.KindOfProjectRoles.Add(new KindOfProjectRole() { RoleId = role.RoleId, KindId = kind.KindOfProjectId });
 
                 _context.KindsOfProject.Update(kind);
 
@@ -42,7 +42,7 @@ namespace WorkingWithProjects.API.Models
 
         public IEnumerable<KindOfProject> GetAllKindsForRole(int roleId)
         {
-            return _context.KindsOfProject.Where(x => x.Roles.Where(y => y.RoleId == roleId) != null);
+            return _context.KindsOfProject.Where(x => x.KindOfProjectRoles.Where(y => y.RoleId == roleId) != null);
         }
 
         public KindOfProject GetKindById(int kindId)

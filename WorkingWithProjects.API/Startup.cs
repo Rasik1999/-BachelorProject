@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using WorkingWithProjects.API.Helpers;
 using WorkingWithProjects.API.Models;
 
 namespace WorkingWithProjects.API
@@ -29,6 +30,7 @@ namespace WorkingWithProjects.API
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IHashtagRepository, HashtagRepository>();
             services.AddScoped<IRoleRepository, RoleRepository>();
+            services.AddScoped<IRoleKindMappingHelper, RoleKindMappingHelper>();
 
             services.AddAutoMapper(typeof(ProjectProfile));
 
