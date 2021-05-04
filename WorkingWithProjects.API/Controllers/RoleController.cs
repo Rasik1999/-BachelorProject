@@ -12,12 +12,10 @@ namespace WorkingWithProjects.API.Controllers
     public class RoleController : ControllerBase
     {
         private readonly IRoleRepository _roleRepository;
-        private readonly IRoleKindMappingHelper _mappingHelper;
 
-        public RoleController(IRoleRepository roleRepository, IRoleKindMappingHelper mappingHelper)
+        public RoleController(IRoleRepository roleRepository)
         {
             _roleRepository = roleRepository;
-            _mappingHelper = mappingHelper;
         }
 
         // GET: api/Role
@@ -53,18 +51,6 @@ namespace WorkingWithProjects.API.Controllers
         public Role DeleteRole(int id)
         {
             return _roleRepository.DeleteRole(id);
-        }
-
-        [HttpPut("connectroletokind/{roleid},{kindid}")]
-        public bool PutRoleToKind(int roleid, int kindid)
-        {
-            return _roleRepository.CreateRelationship(roleid, kindid);
-        }
-
-        [HttpGet("showallroletokind")]
-        public List<RoleKindViewModel> ShowAllRoleToKind()
-        {
-            return _mappingHelper.MapToListRoleKindView();
         }
     }
 }

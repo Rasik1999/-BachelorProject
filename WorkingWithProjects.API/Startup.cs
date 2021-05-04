@@ -31,6 +31,7 @@ namespace WorkingWithProjects.API
             services.AddScoped<IHashtagRepository, HashtagRepository>();
             services.AddScoped<IRoleRepository, RoleRepository>();
             services.AddScoped<IRoleKindMappingHelper, RoleKindMappingHelper>();
+            services.AddScoped<IKindsRolesRepository, KindsRolesRepository>();
 
             services.AddAutoMapper(typeof(ProjectProfile));
 

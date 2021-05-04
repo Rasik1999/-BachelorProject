@@ -7,5 +7,7 @@ namespace WorkingWithProjects.API.Helpers
     {
         RoleKindViewModel MapToRoleKindView(int roleId, int kindId);
         List<RoleKindViewModel> MapToListRoleKindView();
+        List<RoleKindViewModel> MapToListRolesForKindView(int kindId);
+        List<RoleKindViewModel> MapToListKindsForRoleView(int roleId);
     }
 }
