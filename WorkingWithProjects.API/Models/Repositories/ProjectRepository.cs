@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using WorkingWithProjects.DATA;
 
@@ -15,9 +16,28 @@ namespace WorkingWithProjects.API.Models
 
         public Project AddProject(Project project)
         {
+            Validate(project);
+
             var addedEntity = _context.Projects.Add(project);
             _context.SaveChanges();
             return addedEntity.Entity;
+        }
+
+        private void Validate(Project project)
+        {
+            try
+            {
+                var hashtagIds = project.HashtagIds.Split(",");
+
+                foreach (var id in hashtagIds)
+                {
+                    Int32.TryParse(id, out _);
+                }
+            }
+            catch (Exception)
+            {
+                throw new Exception("Something wrong with hashtag`s ids");
+            }
         }
 
         public Project DeleteProject(int projectId)

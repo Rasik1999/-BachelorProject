@@ -9,6 +9,7 @@ namespace WorkingWithProjects.API.Models
         Progress GetProgressById(int progressId);
         Progress GetProgressByProjectId(int projectId);
         Progress UpdateProgress(Progress progress);
-        Progress CreateProgress(int projectId);
+        Progress CreateBlankProgress(int projectId);
+        Progress CreateProgress(int projectId, decimal value);
     }
 }

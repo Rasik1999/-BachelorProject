@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using WorkingWithProjects.API.Models;
 using WorkingWithProjects.API.Models.ViewModel;
+using WorkingWithProjects.API.ViewModels;
+using WorkingWithProjects.DATA;
 
 namespace WorkingWithProjects.API.Controllers
 {
@@ -32,7 +34,7 @@ namespace WorkingWithProjects.API.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAllEmployees()
+        public IActionResult GetAllProjects()
         {
             var projects = _projectRepository.GetAllProjects().ToList();
             var result = _mapper.Map<List<ProjectViewModel>>(projects);
@@ -43,12 +45,51 @@ namespace WorkingWithProjects.API.Controllers
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetEmployeeById(int id)
+        public IActionResult GetProjectById(int id)
         {
             var projects = _projectRepository.GetProjectById(id);
             var result = _mapper.Map<ProjectViewModel>(projects);
 
             MappingForProjectViewModel(new List<ProjectViewModel> { result });
+
+            return Ok(result);
+        }
+
+        [HttpPost]
+        public IActionResult CreateProject([FromBody] ProjectProgressViewModel projectViewModel)
+        {
+            var project = _mapper.Map<Project>(projectViewModel);
+            var addedProject = _projectRepository.AddProject(project);
+            _progressRepository.CreateProgress(project.ProjectId, projectViewModel.DesiredValue);
+
+            var result = _mapper.Map<ProjectViewModel>(addedProject);
+
+            MappingForProjectViewModel(new List<ProjectViewModel> { result });
+
+            return Ok(result);
+        }
+
+        [HttpPut("{id}")]
+        public IActionResult PutProject(int id, [FromBody] ProjectProgressViewModel projectViewModel)
+        {
+            var project = _mapper.Map<Project>(projectViewModel);
+            project.ProjectId = id;
+            var addedProject = _projectRepository.UpdateProject(project);
+            var progress = _progressRepository.GetProgressByProjectId(addedProject.ProjectId);
+            progress.DesiredValue = projectViewModel.DesiredValue;
+            _progressRepository.UpdateProgress(progress);
+
+            var result = _mapper.Map<ProjectViewModel>(addedProject);
+
+            MappingForProjectViewModel(new List<ProjectViewModel> { result });
+
+            return Ok(result);
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult DeleteProject(int id)
+        {
+            var result = _projectRepository.DeleteProject(id);
 
             return Ok(result);
         }
@@ -62,6 +103,7 @@ namespace WorkingWithProjects.API.Controllers
 
                 if (progress != null)
                 {
+                    item.ProgressId = progress.ProgressId;
                     item.DesiredValue = progress.DesiredValue;
                     item.ProgressValue = progress.Value;
                     item.PercentageOfCompletion = Math.Round(progress.Value / progress.DesiredValue * 100, 2);

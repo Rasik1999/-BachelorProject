@@ -13,9 +13,20 @@ namespace WorkingWithProjects.API.Models
             _context = context;
         }
 
-        public Progress CreateProgress(int projectId)
+        public Progress CreateBlankProgress(int projectId)
         {
             Progress newProgress = new Progress() { ProjectId = projectId };
+
+            var result = _context.Progresses.Add(newProgress).Entity;
+
+            _context.SaveChanges();
+
+            return result;
+        }
+
+        public Progress CreateProgress(int projectId, decimal value)
+        {
+            Progress newProgress = new Progress() { ProjectId = projectId, DesiredValue = value };
 
             var result = _context.Progresses.Add(newProgress).Entity;
 

@@ -22,6 +22,8 @@ namespace WorkingWithProjects.API.Models.ViewModel
 
         public int UserId { get; set; }
 
+        public int ProgressId { get; set; }
+
         public decimal ProgressValue { get; set; }
 
         public decimal DesiredValue { get; set; }
