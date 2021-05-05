@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using WorkingWithProjects.API.Models;
+using WorkingWithProjects.API.Services;
 using WorkingWithProjects.DATA;
 
 namespace WorkingWithProjects.API.Controllers
@@ -10,10 +12,12 @@ namespace WorkingWithProjects.API.Controllers
     public class ProgressController : ControllerBase
     {
         private readonly IProgressRepository _progressRepository;
+        private readonly INotificationService _notificationService;
 
-        public ProgressController(IProgressRepository progressRepository)
+        public ProgressController(IProgressRepository progressRepository, INotificationService notificationService)
         {
             _progressRepository = progressRepository;
+            _notificationService = notificationService;
         }
 
         // GET: api/<ProgressController>
@@ -41,10 +45,22 @@ namespace WorkingWithProjects.API.Controllers
         [HttpPut("projectId")]
         public Progress Put(int projectId, [FromBody] decimal value)
         {
-            var project = _progressRepository.GetProgressByProjectId(projectId);
-            project.Value += value;
+            var progress = _progressRepository.GetProgressByProjectId(projectId);
+            progress.Value += value;
 
-            return _progressRepository.UpdateProgress(project);
+            UpdatePercentage(progress);
+
+            if (progress.PercentageOfCompletion >= 100)
+            {
+                _notificationService.NotificateAboutProgress(progress);
+            }
+
+            return _progressRepository.UpdateProgress(progress);
+        }
+
+        private void UpdatePercentage(Progress progress)
+        {
+            progress.PercentageOfCompletion = Math.Round(progress.Value / progress.DesiredValue * 100, 2);
         }
     }
 }

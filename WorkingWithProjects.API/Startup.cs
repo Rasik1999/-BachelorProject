@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using WorkingWithProjects.API.Helpers;
 using WorkingWithProjects.API.Models;
+using WorkingWithProjects.API.Services;
 
 namespace WorkingWithProjects.API
 {
@@ -32,6 +33,8 @@ namespace WorkingWithProjects.API
             services.AddScoped<IRoleRepository, RoleRepository>();
             services.AddScoped<IRoleKindMappingHelper, RoleKindMappingHelper>();
             services.AddScoped<IKindsRolesRepository, KindsRolesRepository>();
+            services.AddScoped<ISentMessageService, MailService>();
+            services.AddScoped<INotificationService, NotificationService>();
 
             services.AddAutoMapper(typeof(ProjectProfile));
 
