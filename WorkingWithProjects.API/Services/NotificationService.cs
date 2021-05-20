@@ -17,11 +17,10 @@ namespace WorkingWithProjects.API.Services
 
         public bool NotificateAboutProgress(Progress progress)
         {
-            User user = _contextDB.Users
-                .Where(x => x.UserId == _contextDB.Projects.Where(y => y.ProjectId == progress.ProjectId).Select(z => z.UserId).FirstOrDefault())
-                .FirstOrDefault();
+            Project project = _contextDB.Projects
+                .Where(x => x.ProjectId == progress.ProjectId).FirstOrDefault();
 
-            return _sentMessageService.SentMessage("Your project is complited", "rasul.ramazanov@nure.ua"/*user.Email*/);
+            return _sentMessageService.SentMessage("Your project is complited", "rasul.ramazanov@nure.ua"/*user.Email*/, project);
         }
     }
 }

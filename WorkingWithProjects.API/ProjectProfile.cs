@@ -10,6 +10,7 @@ namespace WorkingWithProjects.API
     {
         public ProjectProfile()
         {
+            CreateMap<ProjectViewModel, Project>();
             CreateMap<Project, ProjectViewModel>();
             CreateMap<ProjectProgressViewModel, Project>();
         }

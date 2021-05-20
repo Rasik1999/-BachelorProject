@@ -61,9 +61,9 @@ namespace WorkingWithProjects.API.Models
             return _context.Projects.FirstOrDefault(x => x.ProjectId == projectId);
         }
 
-        public Project GetProjectsByUserId(int userId)
+        public Project GetProjectsByUserId(string userId)
         {
-            return _context.Projects.FirstOrDefault(x => x.UserId == userId);
+            return _context.Projects.FirstOrDefault(x => string.Equals(x.UserId, userId));
         }
 
         public Project UpdateProject(Project project)
@@ -84,6 +84,11 @@ namespace WorkingWithProjects.API.Models
             }
 
             return null;
+        }
+
+        public IEnumerable<Project> GetAllModeratedProjects()
+        {
+            return _context.Projects.Where(x => x.IsModerated);
         }
     }
 }

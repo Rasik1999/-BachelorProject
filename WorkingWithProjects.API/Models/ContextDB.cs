@@ -10,7 +10,6 @@ namespace WorkingWithProjects.API.Models
 
         }
 
-        public DbSet<User> Users { get; set; }
         public DbSet<Project> Projects { get; set; }
         public DbSet<Progress> Progresses { get; set; }
         public DbSet<KindOfProject> KindsOfProject { get; set; }
@@ -40,9 +39,6 @@ namespace WorkingWithProjects.API.Models
             modelBuilder.Entity<KindOfProject>().HasData(new KindOfProject { KindOfProjectId = 2, Name = "TestName2" });
             modelBuilder.Entity<KindOfProject>().HasData(new KindOfProject { KindOfProjectId = 3, Name = "TestName3" });
 
-            modelBuilder.Entity<User>().HasData(new User { UserId = 1, LastName = "Yagon", FirstName = "Don", RolesId = 1 });
-            modelBuilder.Entity<User>().HasData(new User { UserId = 2, LastName = "Yasha", FirstName = "Lava", RolesId = 2 });
-
             modelBuilder.Entity<Hashtag>().HasData(new Hashtag { HashtagId = 1, Name = "HashtagName1" });
             modelBuilder.Entity<Hashtag>().HasData(new Hashtag { HashtagId = 2, Name = "HashtagName2" });
             modelBuilder.Entity<Hashtag>().HasData(new Hashtag { HashtagId = 3, Name = "HashtagName3" });
@@ -52,7 +48,7 @@ namespace WorkingWithProjects.API.Models
                 {
                     ProjectId = 1,
                     KindOfProjectId = 1,
-                    UserId = 1,
+                    UserId = "UserId1",
                     Title = "Title1",
                     Description = "Description1",
                     HashtagIds = "1,2"
@@ -63,7 +59,7 @@ namespace WorkingWithProjects.API.Models
                 {
                     ProjectId = 2,
                     KindOfProjectId = 2,
-                    UserId = 2,
+                    UserId = "UserId2",
                     Title = "Title2",
                     Description = "Description2",
                     HashtagIds = "2,3"

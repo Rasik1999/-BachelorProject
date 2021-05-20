@@ -44,6 +44,17 @@ namespace WorkingWithProjects.API.Controllers
             return Ok(result);
         }
 
+        [HttpGet ("moderated")]
+        public IActionResult GetAllModeratedProjects()
+        {
+            var projects = _projectRepository.GetAllModeratedProjects().ToList();
+            var result = _mapper.Map<List<ProjectViewModel>>(projects);
+
+            MappingForProjectViewModel(result);
+
+            return Ok(result);
+        }
+
         [HttpGet("{id}")]
         public IActionResult GetProjectById(int id)
         {
@@ -82,6 +93,26 @@ namespace WorkingWithProjects.API.Controllers
             var result = _mapper.Map<ProjectViewModel>(addedProject);
 
             MappingForProjectViewModel(new List<ProjectViewModel> { result });
+
+            return Ok(result);
+        }
+
+        [HttpPut("moderate/{id}")]
+        public IActionResult ModerateProject(int id)
+        {
+            var project = _projectRepository.GetProjectById(id);
+            project.IsModerated = true;
+            var result =_projectRepository.UpdateProject(project);
+
+            return Ok(result);
+        }
+
+        [HttpPut("unmoderate/{id}")]
+        public IActionResult UnModerateProject(int id)
+        {
+            var project = _projectRepository.GetProjectById(id);
+            project.IsModerated = false;
+            var result = _projectRepository.UpdateProject(project);
 
             return Ok(result);
         }

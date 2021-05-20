@@ -28,7 +28,6 @@ namespace WorkingWithProjects.API
             services.AddScoped<IKindOfProjectRepository, KindOfProjectRepository>();
             services.AddScoped<IProgressRepository, ProgressRepository>();
             services.AddScoped<IProjectRepository, ProjectRepository>();
-            services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IHashtagRepository, HashtagRepository>();
             services.AddScoped<IRoleRepository, RoleRepository>();
             services.AddScoped<IRoleKindMappingHelper, RoleKindMappingHelper>();

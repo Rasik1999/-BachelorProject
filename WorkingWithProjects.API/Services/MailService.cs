@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Net;
 using System.Net.Mail;
+using WorkingWithProjects.DATA;
 
 namespace WorkingWithProjects.API.Services
 {
     public class MailService : ISentMessageService
     {
-        public bool SentMessage(string message, string ownerMessage)
+        public bool SentMessage(string message, string ownerMessage, Project project)
         {
             try
             {
