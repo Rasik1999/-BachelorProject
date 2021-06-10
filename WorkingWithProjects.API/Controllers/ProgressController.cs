@@ -58,6 +58,13 @@ namespace WorkingWithProjects.API.Controllers
             return _progressRepository.UpdateProgress(progress);
         }
 
+        // Delete api/<ProgressController>/5
+        [HttpDelete("projectId")]
+        public Progress Delete(int progressId)
+        {
+            return _progressRepository.DeletePogress(progressId);
+        }
+
         private void UpdatePercentage(Progress progress)
         {
             progress.PercentageOfCompletion = Math.Round(progress.Value / progress.DesiredValue * 100, 2);

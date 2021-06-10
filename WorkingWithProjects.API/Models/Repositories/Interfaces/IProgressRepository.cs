@@ -11,5 +11,6 @@ namespace WorkingWithProjects.API.Models
         Progress UpdateProgress(Progress progress);
         Progress CreateBlankProgress(int projectId);
         Progress CreateProgress(int projectId, decimal value);
+        Progress DeletePogress(int id);
     }
 }

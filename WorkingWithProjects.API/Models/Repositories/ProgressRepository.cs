@@ -60,5 +60,14 @@ namespace WorkingWithProjects.API.Models
 
             return result;
         }
+
+        public Progress DeletePogress(int id)
+        {
+            var result =_context.Progresses.Remove(_context.Progresses.Where(x => x.ProgressId == id).FirstOrDefault()).Entity;
+
+            _context.SaveChanges();
+
+            return result;
+        }
     }
 }
