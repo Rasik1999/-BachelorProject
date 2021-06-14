@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
@@ -20,6 +20,10 @@
     <Compile Remove="Migrations\20210503163423_Added_reletionship_for_Roles_and_Kinds.Designer.cs" />
     <Compile Remove="Migrations\20210504111226_Added_Many_To_Many.cs" />
     <Compile Remove="Migrations\20210504111226_Added_Many_To_Many.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Dockerfile.original" />
   </ItemGroup>
 
   <ItemGroup>
