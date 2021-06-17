@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using WorkingWithProjects.DATA;
 
@@ -15,7 +16,11 @@ namespace WorkingWithProjects.API.Models
 
         public Role AddRole(Role role)
         {
-            return _context.Roles.Add(role).Entity;
+            var result = _context.Roles.Add(role).Entity;
+
+            _context.SaveChanges();
+
+            return result;
         }
 
         public Role DeleteRole(int roleId)
@@ -53,6 +58,27 @@ namespace WorkingWithProjects.API.Models
             }
 
             return null;
+        }
+
+        public bool CreateRelationship(int roleId, int kindId)
+        {
+            try
+            {
+                KindOfProject kind = _context.KindsOfProject.Where(x => x.KindOfProjectId == kindId).FirstOrDefault();
+                Role role = _context.Roles.Where(x => x.RoleId == roleId).FirstOrDefault();
+
+                role.KindOfProjectRoles.Add(new KindOfProjectRole() { KindId = kind.KindOfProjectId, RoleId = role.RoleId });
+
+                _context.Roles.Update(role);
+
+                _context.SaveChanges();
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }

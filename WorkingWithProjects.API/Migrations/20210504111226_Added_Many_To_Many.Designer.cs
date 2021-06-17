@@ -10,8 +10,8 @@ using WorkingWithProjects.API.Models;
 namespace WorkingWithProjects.API.Migrations
 {
     [DbContext(typeof(ContextDB))]
-    [Migration("20210503115531_Updated_KindOfProject_And_Users")]
-    partial class Updated_KindOfProject_And_Users
+    [Migration("20210504111226_Added_Many_To_Many")]
+    partial class Added_Many_To_Many
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -83,6 +83,21 @@ namespace WorkingWithProjects.API.Migrations
                             KindOfProjectId = 3,
                             Name = "TestName3"
                         });
+                });
+
+            modelBuilder.Entity("WorkingWithProjects.DATA.KindOfProjectRole", b =>
+                {
+                    b.Property<int>("KindId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RoleId")
+                        .HasColumnType("int");
+
+                    b.HasKey("KindId", "RoleId");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("KindOfProjectRole");
                 });
 
             modelBuilder.Entity("WorkingWithProjects.DATA.Progress", b =>
@@ -230,7 +245,10 @@ namespace WorkingWithProjects.API.Migrations
                     b.Property<string>("LastName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("RoleId")
+                    b.Property<int?>("RoleId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RolesId")
                         .HasColumnType("int");
 
                     b.HasKey("UserId");
@@ -246,7 +264,7 @@ namespace WorkingWithProjects.API.Migrations
                             BirthDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FirstName = "Don",
                             LastName = "Yagon",
-                            RoleId = 1
+                            RolesId = 1
                         },
                         new
                         {
@@ -254,8 +272,27 @@ namespace WorkingWithProjects.API.Migrations
                             BirthDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FirstName = "Lava",
                             LastName = "Yasha",
-                            RoleId = 2
+                            RolesId = 2
                         });
+                });
+
+            modelBuilder.Entity("WorkingWithProjects.DATA.KindOfProjectRole", b =>
+                {
+                    b.HasOne("WorkingWithProjects.DATA.KindOfProject", "KindOfProject")
+                        .WithMany("KindOfProjectRoles")
+                        .HasForeignKey("KindId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("WorkingWithProjects.DATA.Role", "Role")
+                        .WithMany("KindOfProjectRoles")
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("KindOfProject");
+
+                    b.Navigation("Role");
                 });
 
             modelBuilder.Entity("WorkingWithProjects.DATA.Progress", b =>
@@ -292,15 +329,15 @@ namespace WorkingWithProjects.API.Migrations
                 {
                     b.HasOne("WorkingWithProjects.DATA.Role", "Role")
                         .WithMany("Users")
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("RoleId");
 
                     b.Navigation("Role");
                 });
 
             modelBuilder.Entity("WorkingWithProjects.DATA.KindOfProject", b =>
                 {
+                    b.Navigation("KindOfProjectRoles");
+
                     b.Navigation("Projects");
                 });
 
@@ -311,6 +348,8 @@ namespace WorkingWithProjects.API.Migrations
 
             modelBuilder.Entity("WorkingWithProjects.DATA.Role", b =>
                 {
+                    b.Navigation("KindOfProjectRoles");
+
                     b.Navigation("Users");
                 });
 

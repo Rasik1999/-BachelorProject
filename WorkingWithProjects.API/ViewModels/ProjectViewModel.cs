@@ -20,7 +20,9 @@ namespace WorkingWithProjects.API.Models.ViewModel
 
         public int KindOfProjectId { get; set; }
 
-        public int UserId { get; set; }
+        public string UserId { get; set; }
+
+        public int ProgressId { get; set; }
 
         public decimal ProgressValue { get; set; }
 
@@ -28,5 +30,6 @@ namespace WorkingWithProjects.API.Models.ViewModel
 
         public decimal PercentageOfCompletion { get; set; }
 
+        public bool IsModerated { get; set; }
     }
 }

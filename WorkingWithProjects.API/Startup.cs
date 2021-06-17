@@ -4,7 +4,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using WorkingWithProjects.API.Helpers;
 using WorkingWithProjects.API.Models;
+using WorkingWithProjects.API.Services;
 
 namespace WorkingWithProjects.API
 {
@@ -26,9 +28,12 @@ namespace WorkingWithProjects.API
             services.AddScoped<IKindOfProjectRepository, KindOfProjectRepository>();
             services.AddScoped<IProgressRepository, ProgressRepository>();
             services.AddScoped<IProjectRepository, ProjectRepository>();
-            services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IHashtagRepository, HashtagRepository>();
             services.AddScoped<IRoleRepository, RoleRepository>();
+            services.AddScoped<IRoleKindMappingHelper, RoleKindMappingHelper>();
+            services.AddScoped<IKindsRolesRepository, KindsRolesRepository>();
+            services.AddScoped<ISentMessageService, MailService>();
+            services.AddScoped<INotificationService, NotificationService>();
 
             services.AddAutoMapper(typeof(ProjectProfile));
 
@@ -39,6 +44,7 @@ namespace WorkingWithProjects.API
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            //DatabaseManagementService.MigrationInitialisation(app);
             // Enable middleware to serve generated Swagger as a JSON endpoint.
             app.UseSwagger();
 
@@ -57,6 +63,13 @@ namespace WorkingWithProjects.API
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            // global cors policy
+            app.UseCors(x => x
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .SetIsOriginAllowed(origin => true) // allow any origin
+                .AllowCredentials()); // allow credentials
 
             app.UseAuthorization();
 
