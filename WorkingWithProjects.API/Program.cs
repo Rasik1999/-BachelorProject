@@ -11,6 +11,12 @@ namespace WorkingWithProjects.API
         {
             var host = CreateHostBuilder(args).Build();
 
+            using (var scope = host.Services.CreateScope())
+            {
+                using var context = scope.ServiceProvider.GetService<ContextDB>();
+                context.Database.EnsureCreated();
+            }
+
             host.Run();
         }
 

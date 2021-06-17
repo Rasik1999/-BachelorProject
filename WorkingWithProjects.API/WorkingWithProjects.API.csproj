@@ -4,6 +4,7 @@
     <TargetFramework>net5.0</TargetFramework>
     <UserSecretsId>92e44799-12ff-412b-8f8d-a29e5351a2c8</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <AssemblyName>API</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
@@ -20,10 +21,8 @@
     <Compile Remove="Migrations\20210503163423_Added_reletionship_for_Roles_and_Kinds.Designer.cs" />
     <Compile Remove="Migrations\20210504111226_Added_Many_To_Many.cs" />
     <Compile Remove="Migrations\20210504111226_Added_Many_To_Many.Designer.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Remove="Dockerfile.original" />
+    <Compile Remove="Migrations\20210520122148_DeletedUser.cs" />
+    <Compile Remove="Migrations\20210520122148_DeletedUser.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -42,8 +41,6 @@
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.9" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.2" />
-    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="5.0.6" />
-    <PackageReference Include="RabbitMQ.Client" Version="6.2.1" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.1.4" />
   </ItemGroup>
 
