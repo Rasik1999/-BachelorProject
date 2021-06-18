@@ -4,6 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using RabbitMQ.Client;
+using System;
 using WorkingWithProjects.API.Helpers;
 using WorkingWithProjects.API.Models;
 using WorkingWithProjects.API.Services;
@@ -34,11 +36,23 @@ namespace WorkingWithProjects.API
             services.AddScoped<IKindsRolesRepository, KindsRolesRepository>();
             services.AddScoped<ISentMessageService, MailService>();
             services.AddScoped<INotificationService, NotificationService>();
+            services.AddScoped<IProjectsHelper, ProjectsHelper>();
 
             services.AddAutoMapper(typeof(ProjectProfile));
 
             services.AddControllers();
             services.AddSwaggerGen();
+
+            services
+                .AddSingleton(serviceProvider =>
+                {
+                    var uri = new Uri("amqp://guest:guest@rabbit:5672/CUSTOM_HOST");
+                    return new ConnectionFactory
+                    {
+                        Uri = uri,
+                        DispatchConsumersAsync = true
+                    };
+                });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
