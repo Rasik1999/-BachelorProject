@@ -10,4 +10,21 @@ services:
         ports:
             - "8000:80"
         networks:
-            - spilnota    
+            - spilnota 
+        depends_on:
+            rabbit:
+                condition: service_healthy
+    rabbit:
+        image: rabbitmq:3-management-alpine
+        restart: always
+        ports:
+          - "7000:7000"
+        healthcheck:
+          test: [ "CMD", "nc", "-z", "rabbit", "5672" ]
+          interval: 30s
+          timeout: 10s
+          retries: 5
+        environment:
+          - RABBITMQ_DEFAULT_VHOST=CUSTOM_HOST
+          - RABBITMQ_DEFAULT_USER=guest
+          - RABBITMQ_DEFAULT_PASS=guest
