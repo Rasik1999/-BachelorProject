@@ -36,6 +36,7 @@ namespace WorkingWithProjects.API
             services.AddScoped<IKindsRolesRepository, KindsRolesRepository>();
             services.AddScoped<ISentMessageService, MailService>();
             services.AddScoped<INotificationService, NotificationService>();
+            services.AddScoped<IProjectsHelper, ProjectsHelper>();
 
             services.AddAutoMapper(typeof(ProjectProfile));
 

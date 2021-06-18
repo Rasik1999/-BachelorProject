@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using WorkingWithProjects.API.Helpers;
 using WorkingWithProjects.API.Models;
 using WorkingWithProjects.API.Models.ViewModel;
 using WorkingWithProjects.API.ViewModels;
@@ -17,6 +18,7 @@ namespace WorkingWithProjects.API.Controllers
         private readonly IProgressRepository _progressRepository;
         private readonly IHashtagRepository _hashtagRepository;
         private readonly IKindOfProjectRepository _kindOfProjectRepository;
+        private readonly IProjectsHelper _projectsHelper;
         private IMapper _mapper { get; set; }
 
         public ProjectsController(
@@ -24,13 +26,15 @@ namespace WorkingWithProjects.API.Controllers
             IMapper mapper,
             IHashtagRepository hashtagRepository,
             IProgressRepository progressRepository,
-            IKindOfProjectRepository kindOfProjectRepository)
+            IKindOfProjectRepository kindOfProjectRepository,
+            IProjectsHelper projectsHelper)
         {
             _projectRepository = projectRepository;
             _progressRepository = progressRepository;
             _hashtagRepository = hashtagRepository;
             _kindOfProjectRepository = kindOfProjectRepository;
             _mapper = mapper;
+            _projectsHelper = projectsHelper;
         }
 
         [HttpGet]
@@ -39,7 +43,7 @@ namespace WorkingWithProjects.API.Controllers
             var projects = _projectRepository.GetAllProjects().ToList();
             var result = _mapper.Map<List<ProjectViewModel>>(projects);
 
-            MappingForProjectViewModel(result);
+            _projectsHelper.MappingForProjectViewModel(result);
 
             return Ok(result);
         }
@@ -50,7 +54,7 @@ namespace WorkingWithProjects.API.Controllers
             var projects = _projectRepository.GetAllModeratedProjects().ToList();
             var result = _mapper.Map<List<ProjectViewModel>>(projects);
 
-            MappingForProjectViewModel(result);
+            _projectsHelper.MappingForProjectViewModel(result);
 
             return Ok(result);
         }
@@ -61,9 +65,26 @@ namespace WorkingWithProjects.API.Controllers
             var projects = _projectRepository.GetProjectById(id);
             var result = _mapper.Map<ProjectViewModel>(projects);
 
-            MappingForProjectViewModel(new List<ProjectViewModel> { result });
+            _projectsHelper.MappingForProjectViewModel(new List<ProjectViewModel> { result });
 
             return Ok(result);
+        }
+
+        [HttpGet("bestprojects/{projectId}")]
+        public IActionResult GetBestProjects(int projectId)
+        {
+            var project = _projectRepository.GetProjectById(projectId);
+
+            if (project is null)
+                return BadRequest("Current project is null");
+
+            var mapResult = _mapper.Map<ProjectViewModel>(project);
+
+            _projectsHelper.MappingForProjectViewModel(new List<ProjectViewModel> { mapResult });
+
+            var bestProjects = _projectsHelper.FindBestProjects(mapResult);
+
+            return Ok(bestProjects);
         }
 
         [HttpPost]
@@ -75,7 +96,7 @@ namespace WorkingWithProjects.API.Controllers
 
             var result = _mapper.Map<ProjectViewModel>(addedProject);
 
-            MappingForProjectViewModel(new List<ProjectViewModel> { result });
+            _projectsHelper.MappingForProjectViewModel(new List<ProjectViewModel> { result });
 
             return Ok(result);
         }
@@ -92,7 +113,7 @@ namespace WorkingWithProjects.API.Controllers
 
             var result = _mapper.Map<ProjectViewModel>(addedProject);
 
-            MappingForProjectViewModel(new List<ProjectViewModel> { result });
+            _projectsHelper.MappingForProjectViewModel(new List<ProjectViewModel> { result });
 
             return Ok(result);
         }
@@ -123,46 +144,6 @@ namespace WorkingWithProjects.API.Controllers
             var result = _projectRepository.DeleteProject(id);
 
             return Ok(result);
-        }
-
-        private List<ProjectViewModel> MappingForProjectViewModel(List<ProjectViewModel> projectViewModels)
-        {
-            foreach (var item in projectViewModels)
-            {
-                //Adding progress values
-                var progress = _progressRepository.GetProgressByProjectId(item.ProjectId);
-
-                if (progress != null)
-                {
-                    item.ProgressId = progress.ProgressId;
-                    item.DesiredValue = progress.DesiredValue;
-                    item.ProgressValue = progress.Value;
-                    item.PercentageOfCompletion = Math.Round(progress.Value / progress.DesiredValue * 100, 2);
-                }
-
-                //Adding hashtag names to list
-                var ids = item.HashtagIds is null ? null : Array.ConvertAll(item.HashtagIds.Split(","), int.Parse).ToList();
-
-                if (ids != null)
-                {
-                    ids.Sort();
-
-                    var hashtags = _hashtagRepository.GetHashtagsByIds(ids.First(), ids.Last());
-
-                    if (hashtags != null)
-                    {
-                        foreach (var hashtagId in ids)
-                        {
-                            item.HashtagNames.Add(hashtags.Where(x => x.HashtagId == hashtagId).Select(x => x.Name).First());
-                        }
-                    }
-                }
-
-                //Adding KindOfProject name
-                item.KindOfProjectName = _kindOfProjectRepository.GetKindById(item.KindOfProjectId).Name;
-            }
-
-            return projectViewModels;
         }
     }
 }
