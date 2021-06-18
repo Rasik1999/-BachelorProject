@@ -5,6 +5,7 @@ using NUnit.Framework;
 using System.Collections.Generic;
 using System.Linq;
 using WorkingWithProjects.API.Controllers;
+using WorkingWithProjects.API.Helpers;
 using WorkingWithProjects.API.Models;
 using WorkingWithProjects.API.Models.ViewModel;
 using WorkingWithProjects.DATA;
@@ -13,10 +14,9 @@ namespace WorkingWithProjects.Tests
 {
     public class ProjectsControllerTests
     {
-        private Mock<IHashtagRepository> mockHashtagsRepository;
         private Mock<IProjectRepository> mockProjectRepository;
         private Mock<IProgressRepository> mockProgressRepository;
-        private Mock<IKindOfProjectRepository> mockKindOfProjectRepository;
+        private Mock<IProjectsHelper> mockProjectsHelper;
         private Mock<IMapper> mockMapper;
         private ProjectsController projectController;
         private IEnumerable<Project> listOfProjects;
@@ -28,26 +28,23 @@ namespace WorkingWithProjects.Tests
             FillListOfProjects();
             FillListOfProjectViewModels();
 
-            mockHashtagsRepository = new Mock<IHashtagRepository>();
             mockProjectRepository = new Mock<IProjectRepository>();
             mockProgressRepository = new Mock<IProgressRepository>();
-            mockKindOfProjectRepository = new Mock<IKindOfProjectRepository>();
             mockMapper = new Mock<IMapper>();
+            mockProjectsHelper = new Mock<IProjectsHelper>();
 
             mockProjectRepository.Setup(x => x.GetAllProjects()).Returns(listOfProjects);
             mockProjectRepository.Setup(x => x.GetAllModeratedProjects()).Returns(listOfProjects);
             mockProjectRepository.Setup(x => x.GetProjectById(It.IsAny<int>())).Returns(listOfProjects.FirstOrDefault());
             mockMapper.Setup(x => x.Map<List<ProjectViewModel>>(It.IsAny<List<Project>>())).Returns(listOfProjectViewModels);
             mockMapper.Setup(x => x.Map<ProjectViewModel>(It.IsAny<Project>())).Returns(listOfProjectViewModels.FirstOrDefault());
-            mockKindOfProjectRepository.Setup(x => x.GetKindById(It.IsAny<int>())).Returns(new KindOfProject { Name = "Kind" });
             mockProgressRepository.Setup(x => x.GetProgressByProjectId(It.IsAny<int>())).Returns(() => null);
 
             projectController = new ProjectsController(
                 mockProjectRepository.Object,
                 mockMapper.Object,
-                mockHashtagsRepository.Object,
                 mockProgressRepository.Object,
-                mockKindOfProjectRepository.Object);
+                mockProjectsHelper.Object);
         }
 
         [Test]

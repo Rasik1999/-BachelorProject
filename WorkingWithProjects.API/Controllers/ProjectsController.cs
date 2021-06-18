@@ -16,23 +16,17 @@ namespace WorkingWithProjects.API.Controllers
     {
         private readonly IProjectRepository _projectRepository;
         private readonly IProgressRepository _progressRepository;
-        private readonly IHashtagRepository _hashtagRepository;
-        private readonly IKindOfProjectRepository _kindOfProjectRepository;
         private readonly IProjectsHelper _projectsHelper;
         private IMapper _mapper { get; set; }
 
         public ProjectsController(
             IProjectRepository projectRepository,
             IMapper mapper,
-            IHashtagRepository hashtagRepository,
             IProgressRepository progressRepository,
-            IKindOfProjectRepository kindOfProjectRepository,
             IProjectsHelper projectsHelper)
         {
             _projectRepository = projectRepository;
             _progressRepository = progressRepository;
-            _hashtagRepository = hashtagRepository;
-            _kindOfProjectRepository = kindOfProjectRepository;
             _mapper = mapper;
             _projectsHelper = projectsHelper;
         }
@@ -48,10 +42,21 @@ namespace WorkingWithProjects.API.Controllers
             return Ok(result);
         }
 
-        [HttpGet ("moderated")]
+        [HttpGet ("moderatedprojects")]
         public IActionResult GetAllModeratedProjects()
         {
             var projects = _projectRepository.GetAllModeratedProjects().ToList();
+            var result = _mapper.Map<List<ProjectViewModel>>(projects);
+
+            _projectsHelper.MappingForProjectViewModel(result);
+
+            return Ok(result);
+        }
+
+        [HttpGet("unmoderatedprojects")]
+        public IActionResult GetAllUnmoderatedProjects()
+        {
+            var projects = _projectRepository.GetAllUnmoderatedProjects().ToList();
             var result = _mapper.Map<List<ProjectViewModel>>(projects);
 
             _projectsHelper.MappingForProjectViewModel(result);

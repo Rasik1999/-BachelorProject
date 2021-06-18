@@ -7,6 +7,7 @@ namespace WorkingWithProjects.API.Models
     {
         IEnumerable<Project> GetAllProjects();
         IEnumerable<Project> GetAllModeratedProjects();
+        IEnumerable<Project> GetAllUnmoderatedProjects();
         Project GetProjectById(int projectId);
         Project GetProjectsByUserId(string userId);
         Project AddProject(Project project);

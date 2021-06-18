@@ -90,5 +90,10 @@ namespace WorkingWithProjects.API.Models
         {
             return _context.Projects.Where(x => x.IsModerated);
         }
+
+        public IEnumerable<Project> GetAllUnmoderatedProjects()
+        {
+            return _context.Projects.Where(x => !x.IsModerated);
+        }
     }
 }
