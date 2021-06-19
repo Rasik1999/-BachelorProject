@@ -14,6 +14,14 @@ namespace WorkingWithProjects.API.Models
             _context = context;
         }
 
+        public KindOfProject AddKind(KindOfProject kind)
+        {
+            var result = _context.KindsOfProject.Add(kind);
+            _context.SaveChanges();
+
+            return result.Entity;
+        }
+
         public bool CreateRelationship(int roleId, int kindId)
         {
             try
@@ -35,6 +43,15 @@ namespace WorkingWithProjects.API.Models
             return true;
         }
 
+        public KindOfProject DeleteKind(int id)
+        {
+            var kind = _context.KindsOfProject.Where(x => x.KindOfProjectId == id).FirstOrDefault();
+            var result = _context.KindsOfProject.Remove(kind);
+            _context.SaveChanges();
+
+            return result.Entity;
+        }
+
         public IEnumerable<KindOfProject> GetAllKinds()
         {
             return _context.KindsOfProject;
@@ -48,6 +65,14 @@ namespace WorkingWithProjects.API.Models
         public KindOfProject GetKindById(int kindId)
         {
             return _context.KindsOfProject.FirstOrDefault(x => x.KindOfProjectId == kindId);
+        }
+
+        public KindOfProject UpdateKind(KindOfProject kind)
+        {
+            var result = _context.KindsOfProject.Update(kind);
+            _context.SaveChanges();
+
+            return result.Entity;
         }
     }
 }

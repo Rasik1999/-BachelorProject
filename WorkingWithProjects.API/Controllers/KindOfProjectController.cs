@@ -29,5 +29,25 @@ namespace WorkingWithProjects.API.Controllers
         {
             return _kindOfProjectRepository.GetKindById(id);
         }
+
+        [HttpPut]
+        public KindOfProject PutKind([FromBody] KindOfProject kind)
+        {
+            return _kindOfProjectRepository.UpdateKind(kind);
+        }
+
+        // POST: api/Role
+        [HttpPost]
+        public KindOfProject PostKind([FromBody] KindOfProject kind)
+        {
+            return _kindOfProjectRepository.AddKind(kind);
+        }
+
+        // DELETE: api/Role/5
+        [HttpDelete("{id}")]
+        public KindOfProject DeleteKind(int id)
+        {
+            return _kindOfProjectRepository.DeleteKind(id);
+        }
     }
 }
