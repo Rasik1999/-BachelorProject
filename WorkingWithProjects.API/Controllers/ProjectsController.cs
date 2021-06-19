@@ -92,6 +92,21 @@ namespace WorkingWithProjects.API.Controllers
             return Ok(bestProjects);
         }
 
+        [HttpGet("projectsforcategory/{categoryId}")]
+        public IActionResult GetProjectsForCategory(int categoryId)
+        {
+            var projects = _projectRepository.GetAllProjects().Where(x => x.KindOfProjectId == categoryId);
+
+            if (projects is null)
+                return BadRequest("Current projects is null");
+
+            var mapResult = _mapper.Map<List<ProjectViewModel>>(projects);
+
+            _projectsHelper.MappingForProjectViewModel(mapResult);
+
+            return Ok(mapResult);
+        }
+
         [HttpPost]
         public IActionResult CreateProject([FromBody] ProjectProgressViewModel projectViewModel)
         {
