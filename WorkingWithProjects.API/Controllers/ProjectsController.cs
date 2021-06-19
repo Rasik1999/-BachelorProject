@@ -104,6 +104,8 @@ namespace WorkingWithProjects.API.Controllers
 
             _projectsHelper.MappingForProjectViewModel(mapResult);
 
+            mapResult = mapResult.OrderByDescending(x => x.PercentageOfCompletion).ToList();
+
             return Ok(mapResult);
         }
 

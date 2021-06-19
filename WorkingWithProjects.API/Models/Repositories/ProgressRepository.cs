@@ -52,13 +52,11 @@ namespace WorkingWithProjects.API.Models
 
         public Progress UpdateProgress(Progress progress)
         {
-            _context.Progresses.Update(progress);
-
-            var result = _context.Progresses.Update(progress).Entity;
+            var result = _context.Progresses.Update(progress);
 
             _context.SaveChanges();
 
-            return result;
+            return result.Entity;
         }
 
         public Progress DeletePogress(int id)
