@@ -16,23 +16,17 @@ namespace WorkingWithProjects.API.Controllers
     {
         private readonly IProjectRepository _projectRepository;
         private readonly IProgressRepository _progressRepository;
-        private readonly IHashtagRepository _hashtagRepository;
-        private readonly IKindOfProjectRepository _kindOfProjectRepository;
         private readonly IProjectsHelper _projectsHelper;
         private IMapper _mapper { get; set; }
 
         public ProjectsController(
             IProjectRepository projectRepository,
             IMapper mapper,
-            IHashtagRepository hashtagRepository,
             IProgressRepository progressRepository,
-            IKindOfProjectRepository kindOfProjectRepository,
             IProjectsHelper projectsHelper)
         {
             _projectRepository = projectRepository;
             _progressRepository = progressRepository;
-            _hashtagRepository = hashtagRepository;
-            _kindOfProjectRepository = kindOfProjectRepository;
             _mapper = mapper;
             _projectsHelper = projectsHelper;
         }
@@ -48,10 +42,21 @@ namespace WorkingWithProjects.API.Controllers
             return Ok(result);
         }
 
-        [HttpGet ("moderated")]
+        [HttpGet ("moderatedprojects")]
         public IActionResult GetAllModeratedProjects()
         {
             var projects = _projectRepository.GetAllModeratedProjects().ToList();
+            var result = _mapper.Map<List<ProjectViewModel>>(projects);
+
+            _projectsHelper.MappingForProjectViewModel(result);
+
+            return Ok(result);
+        }
+
+        [HttpGet("unmoderatedprojects")]
+        public IActionResult GetAllUnmoderatedProjects()
+        {
+            var projects = _projectRepository.GetAllUnmoderatedProjects().ToList();
             var result = _mapper.Map<List<ProjectViewModel>>(projects);
 
             _projectsHelper.MappingForProjectViewModel(result);
@@ -85,6 +90,23 @@ namespace WorkingWithProjects.API.Controllers
             var bestProjects = _projectsHelper.FindBestProjects(mapResult);
 
             return Ok(bestProjects);
+        }
+
+        [HttpGet("projectsforcategory/{categoryId}")]
+        public IActionResult GetProjectsForCategory(int categoryId)
+        {
+            var projects = _projectRepository.GetAllProjects().Where(x => x.KindOfProjectId == categoryId);
+
+            if (projects is null)
+                return BadRequest("Current projects is null");
+
+            var mapResult = _mapper.Map<List<ProjectViewModel>>(projects);
+
+            _projectsHelper.MappingForProjectViewModel(mapResult);
+
+            mapResult = mapResult.OrderByDescending(x => x.PercentageOfCompletion).ToList();
+
+            return Ok(mapResult);
         }
 
         [HttpPost]

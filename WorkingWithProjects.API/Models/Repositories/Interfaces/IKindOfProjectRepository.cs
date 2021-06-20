@@ -9,5 +9,8 @@ namespace WorkingWithProjects.API.Models
         IEnumerable<KindOfProject> GetAllKindsForRole(int roleId);
         bool CreateRelationship(int roleId, int kindId);
         KindOfProject GetKindById(int kindId);
+        KindOfProject UpdateKind(KindOfProject kind);
+        KindOfProject AddKind(KindOfProject kind);
+        KindOfProject DeleteKind(int id);
     }
 }
