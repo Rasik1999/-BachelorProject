@@ -15,12 +15,12 @@ namespace WorkingWithProjects.API.Models
             _context = context;
         }
 
-        public async Task<Project> AddProject(Project project)
+        public Project AddProject(Project project)
         {
             Validate(project);
 
-            var addedEntity = await _context.Projects.AddAsync(project);
-            await _context.SaveChangesAsync();
+            var addedEntity = _context.Projects.Add(project);
+            _context.SaveChanges();
             return addedEntity.Entity;
         }
 
@@ -41,13 +41,13 @@ namespace WorkingWithProjects.API.Models
             }
         }
 
-        public async Task<Project> DeleteProject(int projectId)
+        public Project DeleteProject(int projectId)
         {
             var foundedProject = _context.Projects.FirstOrDefault(e => e.ProjectId == projectId);
             if (foundedProject == null) return null;
 
             var result = _context.Projects.Remove(foundedProject);
-            await _context.SaveChangesAsync();
+            _context.SaveChanges();
 
             return result.Entity;
         }
@@ -57,19 +57,19 @@ namespace WorkingWithProjects.API.Models
             return _context.Projects;
         }
 
-        public async Task<Project> GetProjectById(int projectId)
+        public Project GetProjectById(int projectId)
         {
-            return await _context.Projects.FindAsync(projectId);
+            return  _context.Projects.Find(projectId);
         }
 
-        public async Task<Project> GetProjectsByUserId(string userId)
+        public Project GetProjectsByUserId(string userId)
         {
             return _context.Projects.FirstOrDefault(x => string.Equals(x.UserId, userId));
         }
 
-        public async Task<Project> UpdateProject(Project project)
+        public Project UpdateProject(Project project)
         {
-            var foundedProject = await _context.Projects.FindAsync(project.ProjectId);
+            var foundedProject =  _context.Projects.Find(project.ProjectId);
 
             if (foundedProject != null)
             {
@@ -80,7 +80,7 @@ namespace WorkingWithProjects.API.Models
                 foundedProject.Photo = project.Photo;
                 foundedProject.HashtagIds = project.HashtagIds;
 
-                await _context.SaveChangesAsync();
+                _context.SaveChanges();
 
                 return foundedProject;
             }

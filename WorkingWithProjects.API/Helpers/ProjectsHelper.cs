@@ -70,7 +70,7 @@ namespace WorkingWithProjects.API.Helpers
             return projectViewModels;
         }
 
-        public async Task<List<ProjectViewModel>> FindBestProjectsAsync(ProjectViewModel mapResult)
+        public List<ProjectViewModel> FindBestProjects(ProjectViewModel mapResult)
         {
             var projects = _projectRepository.GetAllProjects().ToList();
 

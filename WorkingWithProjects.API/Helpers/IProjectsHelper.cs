@@ -7,7 +7,7 @@ namespace WorkingWithProjects.API.Helpers
     public interface IProjectsHelper
     {
         List<ProjectViewModel> MappingForProjectViewModel(List<ProjectViewModel> projectViewModels);
-        Task<List<ProjectViewModel>> FindBestProjectsAsync(ProjectViewModel mapResult);
+        List<ProjectViewModel> FindBestProjects(ProjectViewModel mapResult);
         public void GenerateCollisions(
             ProjectViewModel goodProject,
             Dictionary<ProjectViewModel, int> projectsDictionary,

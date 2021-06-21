@@ -36,7 +36,7 @@ namespace WorkingWithProjects.Tests
 
             mockProjectRepository.Setup(x => x.GetAllProjects()).Returns(listOfProjects);
             mockProjectRepository.Setup(x => x.GetAllModeratedProjects()).Returns(listOfProjects);
-            mockProjectRepository.Setup(x => x.GetProjectById(It.IsAny<int>())).ReturnsAsync(listOfProjects.FirstOrDefault());
+            mockProjectRepository.Setup(x => x.GetProjectById(It.IsAny<int>())).Returns(listOfProjects.FirstOrDefault());
             mockMapper.Setup(x => x.Map<List<ProjectViewModel>>(It.IsAny<List<Project>>())).Returns(listOfProjectViewModels);
             mockMapper.Setup(x => x.Map<ProjectViewModel>(It.IsAny<Project>())).Returns(listOfProjectViewModels.FirstOrDefault());
             mockProgressRepository.Setup(x => x.GetProgressByProjectId(It.IsAny<int>())).Returns(() => null);
@@ -49,9 +49,9 @@ namespace WorkingWithProjects.Tests
         }
 
         [Test]
-        public async Task ProjectController_Get_ReturnsList_PassedAsync()
+        public void ProjectController_Get_ReturnsList_PassedAsync()
         {
-            OkObjectResult actual = await projectController.GetAllProjectsAsync() as OkObjectResult;
+            OkObjectResult actual = projectController.GetAllProjectsAsync() as OkObjectResult;
 
             Assert.IsTrue(actual.Value != null);
             Assert.IsTrue((actual.Value as List<ProjectViewModel>).Count == listOfProjectViewModels.Count);
@@ -70,9 +70,9 @@ namespace WorkingWithProjects.Tests
         }
 
         [Test]
-        public async Task ProjectController_GetById_ReturnsList_PassedAsync()
+        public void ProjectController_GetById_ReturnsList_PassedAsync()
         {
-            OkObjectResult actual = await projectController.GetProjectByIdAsync(1) as OkObjectResult;
+            OkObjectResult actual = projectController.GetProjectByIdAsync(1) as OkObjectResult;
 
             Assert.IsTrue(actual.Value != null);
             Assert.AreEqual(listOfProjectViewModels.FirstOrDefault().Title, (actual.Value as ProjectViewModel).Title);
