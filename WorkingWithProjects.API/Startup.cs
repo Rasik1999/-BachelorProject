@@ -57,11 +57,12 @@ namespace WorkingWithProjects.API
 
             services.AddCors(options =>
             {
-                options.AddDefaultPolicy(
-                    builder =>
-                    {
-                        builder.WithOrigins("http://localhost:8080");
-                    });
+                options.AddPolicy("CorsPolicy",
+                    builder => builder.AllowAnyOrigin()
+                        .AllowAnyMethod()
+                        .AllowAnyHeader()
+                        .AllowCredentials()
+                );
             });
 
             services.AddControllers().AddNewtonsoftJson(o =>
@@ -96,12 +97,7 @@ namespace WorkingWithProjects.API
 
             app.UseAuthorization();
 
-            // global cors policy
-            app.UseCors(x => x
-                .AllowAnyMethod()
-                .AllowAnyHeader()
-                .SetIsOriginAllowed(origin => true) // allow any origin
-                .AllowCredentials()); // allow credentials
+            app.UseCors("CorsPolicy");
 
             app.UseEndpoints(endpoints =>
             {

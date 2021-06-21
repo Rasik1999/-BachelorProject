@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -11,7 +12,7 @@ using WorkingWithProjects.DATA;
 
 namespace WorkingWithProjects.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]"), EnableCors("CorsPolicy")]
     public class ProjectsController : Controller
     {
         private readonly IProjectRepository _projectRepository;

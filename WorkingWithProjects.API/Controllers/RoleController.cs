@@ -1,13 +1,12 @@
 ﻿using System.Collections.Generic;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
-using WorkingWithProjects.API.Helpers;
 using WorkingWithProjects.API.Models;
-using WorkingWithProjects.API.ViewModels;
 using WorkingWithProjects.DATA;
 
 namespace WorkingWithProjects.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]"), EnableCors("CorsPolicy")]
     [ApiController]
     public class RoleController : ControllerBase
     {

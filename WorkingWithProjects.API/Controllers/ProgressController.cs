@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using WorkingWithProjects.API.Models;
@@ -7,7 +8,7 @@ using WorkingWithProjects.DATA;
 
 namespace WorkingWithProjects.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]"), EnableCors("CorsPolicy")]
     [ApiController]
     public class ProgressController : ControllerBase
     {
