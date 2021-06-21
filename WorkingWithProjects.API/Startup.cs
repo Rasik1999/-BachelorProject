@@ -55,12 +55,12 @@ namespace WorkingWithProjects.API
                     };
                 });
 
+            services.AddCors();
+
             services.AddControllers().AddNewtonsoftJson(o =>
             {
                 o.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
             });
-
-            services.AddCors();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -93,7 +93,7 @@ namespace WorkingWithProjects.API
             app.UseCors(x => x
                 .AllowAnyMethod()
                 .AllowAnyHeader()
-                .WithOrigins("http://localhost:8080") // allow any origin
+                .SetIsOriginAllowed(origin => true) // allow any origin
                 .AllowCredentials()); // allow credentials
 
             app.UseEndpoints(endpoints =>
