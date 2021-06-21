@@ -72,7 +72,7 @@ namespace WorkingWithProjects.API.Helpers
 
         public async Task<List<ProjectViewModel>> FindBestProjectsAsync(ProjectViewModel mapResult)
         {
-            var projects = (await _projectRepository.GetAllProjects()).ToList();
+            var projects = _projectRepository.GetAllProjects().ToList();
 
             var mapResultForListOfAllProjects = _mapper.Map<List<ProjectViewModel>>(projects);
 

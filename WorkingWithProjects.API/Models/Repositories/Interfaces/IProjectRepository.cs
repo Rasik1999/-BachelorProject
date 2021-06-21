@@ -6,7 +6,7 @@ namespace WorkingWithProjects.API.Models
 {
     public interface IProjectRepository
     {
-        Task<IEnumerable<Project>> GetAllProjects();
+        IEnumerable<Project> GetAllProjects();
         IEnumerable<Project> GetAllModeratedProjects();
         IEnumerable<Project> GetAllUnmoderatedProjects();
         Task<Project> GetProjectById(int projectId);

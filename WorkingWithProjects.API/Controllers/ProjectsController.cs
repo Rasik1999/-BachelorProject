@@ -36,7 +36,7 @@ namespace WorkingWithProjects.API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllProjectsAsync()
         {
-            var projects = (await _projectRepository.GetAllProjects()).ToList();
+            var projects = _projectRepository.GetAllProjects().ToList();
             var result = _mapper.Map<List<ProjectViewModel>>(projects);
 
             _projectsHelper.MappingForProjectViewModel(result);
@@ -67,9 +67,9 @@ namespace WorkingWithProjects.API.Controllers
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetProjectById(int id)
+        public async Task<IActionResult> GetProjectByIdAsync(int id)
         {
-            var projects = _projectRepository.GetProjectById(id);
+            var projects = await _projectRepository.GetProjectById(id);
             var result = _mapper.Map<ProjectViewModel>(projects);
 
             _projectsHelper.MappingForProjectViewModel(new List<ProjectViewModel> { result });
@@ -78,9 +78,9 @@ namespace WorkingWithProjects.API.Controllers
         }
 
         [HttpGet("bestprojects/{projectId}")]
-        public IActionResult GetBestProjects(int projectId)
+        public async Task<IActionResult> GetBestProjectsAsync(int projectId)
         {
-            var project = _projectRepository.GetProjectById(projectId);
+            var project = await _projectRepository.GetProjectById(projectId);
 
             if (project is null)
                 return BadRequest("Current project is null");
@@ -97,7 +97,7 @@ namespace WorkingWithProjects.API.Controllers
         [HttpGet("projectsforcategory/{categoryId}")]
         public async Task<IActionResult> GetProjectsForCategoryAsync(int categoryId)
         {
-            var projects = await _projectRepository.GetAllProjects();
+            var projects = _projectRepository.GetAllProjects();
             projects = projects.Where(x => x.KindOfProjectId == categoryId);
 
             if (projects is null)

@@ -34,7 +34,7 @@ namespace WorkingWithProjects.Tests
             mockMapper = new Mock<IMapper>();
             mockProjectsHelper = new Mock<IProjectsHelper>();
 
-            mockProjectRepository.Setup(x => x.GetAllProjects()).ReturnsAsync(listOfProjects);
+            mockProjectRepository.Setup(x => x.GetAllProjects()).Returns(listOfProjects);
             mockProjectRepository.Setup(x => x.GetAllModeratedProjects()).Returns(listOfProjects);
             mockProjectRepository.Setup(x => x.GetProjectById(It.IsAny<int>())).ReturnsAsync(listOfProjects.FirstOrDefault());
             mockMapper.Setup(x => x.Map<List<ProjectViewModel>>(It.IsAny<List<Project>>())).Returns(listOfProjectViewModels);
@@ -70,9 +70,9 @@ namespace WorkingWithProjects.Tests
         }
 
         [Test]
-        public void ProjectController_GetById_ReturnsList_Passed()
+        public async Task ProjectController_GetById_ReturnsList_PassedAsync()
         {
-            OkObjectResult actual = projectController.GetProjectById(1) as OkObjectResult;
+            OkObjectResult actual = await projectController.GetProjectByIdAsync(1) as OkObjectResult;
 
             Assert.IsTrue(actual.Value != null);
             Assert.AreEqual(listOfProjectViewModels.FirstOrDefault().Title, (actual.Value as ProjectViewModel).Title);

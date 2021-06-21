@@ -19,7 +19,7 @@ namespace WorkingWithProjects.API.Models
         {
             Validate(project);
 
-            var addedEntity = _context.Projects.Add(project);
+            var addedEntity = await _context.Projects.AddAsync(project);
             await _context.SaveChangesAsync();
             return addedEntity.Entity;
         }
@@ -52,14 +52,14 @@ namespace WorkingWithProjects.API.Models
             return result.Entity;
         }
 
-        public async Task<IEnumerable<Project>> GetAllProjects()
+        public IEnumerable<Project> GetAllProjects()
         {
             return _context.Projects;
         }
 
         public async Task<Project> GetProjectById(int projectId)
         {
-            return _context.Projects.FirstOrDefault(x => x.ProjectId == projectId);
+            return await _context.Projects.FindAsync(projectId);
         }
 
         public async Task<Project> GetProjectsByUserId(string userId)
@@ -69,7 +69,7 @@ namespace WorkingWithProjects.API.Models
 
         public async Task<Project> UpdateProject(Project project)
         {
-            var foundedProject = _context.Projects.FirstOrDefault(e => e.ProjectId == project.ProjectId);
+            var foundedProject = await _context.Projects.FindAsync(project.ProjectId);
 
             if (foundedProject != null)
             {
@@ -80,7 +80,7 @@ namespace WorkingWithProjects.API.Models
                 foundedProject.Photo = project.Photo;
                 foundedProject.HashtagIds = project.HashtagIds;
 
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
 
                 return foundedProject;
             }
