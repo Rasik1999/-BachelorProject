@@ -77,6 +77,7 @@ namespace WorkingWithProjects.API.Models
                 foundedProject.Description = project.Description;
                 foundedProject.KindOfProjectId = project.KindOfProjectId;
                 foundedProject.Photo = project.Photo;
+                foundedProject.HashtagIds = project.HashtagIds;
 
                 _context.SaveChanges();
 
