@@ -93,7 +93,7 @@ namespace WorkingWithProjects.API
             app.UseCors(x => x
                 .AllowAnyMethod()
                 .AllowAnyHeader()
-                .SetIsOriginAllowed(origin => true) // allow any origin
+                .WithOrigins("http://localhost:8080") // allow any origin
                 .AllowCredentials()); // allow credentials
 
             app.UseEndpoints(endpoints =>
