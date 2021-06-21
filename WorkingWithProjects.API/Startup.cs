@@ -93,10 +93,10 @@ namespace WorkingWithProjects.API
 
             app.UseRouting();
 
-            app.UseAuthorization();
-
             app.UseCors("CorsPolicy");
 
+            app.UseAuthorization();
+            
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
