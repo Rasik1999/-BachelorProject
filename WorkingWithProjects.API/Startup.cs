@@ -55,7 +55,14 @@ namespace WorkingWithProjects.API
                     };
                 });
 
-            services.AddCors();
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(
+                    builder =>
+                    {
+                        builder.WithOrigins("http://localhost:8080");
+                    });
+            });
 
             services.AddControllers().AddNewtonsoftJson(o =>
             {
