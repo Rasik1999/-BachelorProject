@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using WorkingWithProjects.API.Helpers;
 using WorkingWithProjects.API.Models;
 using WorkingWithProjects.API.Models.ViewModel;
@@ -33,9 +34,9 @@ namespace WorkingWithProjects.API.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAllProjects()
+        public async Task<IActionResult> GetAllProjectsAsync()
         {
-            var projects = _projectRepository.GetAllProjects().ToList();
+            var projects = (await _projectRepository.GetAllProjects()).ToList();
             var result = _mapper.Map<List<ProjectViewModel>>(projects);
 
             _projectsHelper.MappingForProjectViewModel(result);
@@ -88,15 +89,16 @@ namespace WorkingWithProjects.API.Controllers
 
             _projectsHelper.MappingForProjectViewModel(new List<ProjectViewModel> { mapResult });
 
-            var bestProjects = _projectsHelper.FindBestProjects(mapResult);
+            var bestProjects = _projectsHelper.FindBestProjectsAsync(mapResult);
 
             return Ok(bestProjects);
         }
 
         [HttpGet("projectsforcategory/{categoryId}")]
-        public IActionResult GetProjectsForCategory(int categoryId)
+        public async Task<IActionResult> GetProjectsForCategoryAsync(int categoryId)
         {
-            var projects = _projectRepository.GetAllProjects().Where(x => x.KindOfProjectId == categoryId);
+            var projects = await _projectRepository.GetAllProjects();
+            projects = projects.Where(x => x.KindOfProjectId == categoryId);
 
             if (projects is null)
                 return BadRequest("Current projects is null");
@@ -111,11 +113,11 @@ namespace WorkingWithProjects.API.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreateProject([FromBody] ProjectProgressViewModel projectViewModel)
+        public async Task<IActionResult> CreateProjectAsync([FromBody] ProjectProgressViewModel projectViewModel)
         {
             var project = _mapper.Map<Project>(projectViewModel);
-            var addedProject = _projectRepository.AddProject(project);
-            _progressRepository.CreateProgress(project.ProjectId, projectViewModel.DesiredValue);
+            var addedProject = await _projectRepository.AddProject(project);
+            //_progressRepository.CreateProgress(project.ProjectId, projectViewModel.DesiredValue);
 
             var result = _mapper.Map<ProjectViewModel>(addedProject);
 
@@ -125,11 +127,11 @@ namespace WorkingWithProjects.API.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult PutProject(int id, [FromBody] ProjectProgressViewModel projectViewModel)
+        public async Task<IActionResult> PutProjectAsync(int id, [FromBody] ProjectProgressViewModel projectViewModel)
         {
             var project = _mapper.Map<Project>(projectViewModel);
             project.ProjectId = id;
-            var addedProject = _projectRepository.UpdateProject(project);
+            var addedProject = await _projectRepository.UpdateProject(project);
             var progress = _progressRepository.GetProgressByProjectId(addedProject.ProjectId);
             progress.DesiredValue = projectViewModel.DesiredValue;
             _progressRepository.UpdateProgress(progress);
@@ -142,9 +144,9 @@ namespace WorkingWithProjects.API.Controllers
         }
 
         [HttpPut("moderate/{id}")]
-        public IActionResult ModerateProject(int id)
+        public async Task<IActionResult> ModerateProjectAsync(int id)
         {
-            var project = _projectRepository.GetProjectById(id);
+            var project = await _projectRepository.GetProjectById(id);
             project.IsModerated = true;
             var result =_projectRepository.UpdateProject(project);
 
@@ -152,9 +154,9 @@ namespace WorkingWithProjects.API.Controllers
         }
 
         [HttpPut("unmoderate/{id}")]
-        public IActionResult UnModerateProject(int id)
+        public async Task<IActionResult> UnModerateProjectAsync(int id)
         {
-            var project = _projectRepository.GetProjectById(id);
+            var project = await _projectRepository.GetProjectById(id);
             project.IsModerated = false;
             var result = _projectRepository.UpdateProject(project);
 

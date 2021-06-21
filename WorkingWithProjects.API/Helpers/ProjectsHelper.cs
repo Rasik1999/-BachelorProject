@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using WorkingWithProjects.API.Models;
 using WorkingWithProjects.API.Models.ViewModel;
 
@@ -69,9 +70,9 @@ namespace WorkingWithProjects.API.Helpers
             return projectViewModels;
         }
 
-        public List<ProjectViewModel> FindBestProjects(ProjectViewModel mapResult)
+        public async Task<List<ProjectViewModel>> FindBestProjectsAsync(ProjectViewModel mapResult)
         {
-            var projects = _projectRepository.GetAllProjects().ToList();
+            var projects = (await _projectRepository.GetAllProjects()).ToList();
 
             var mapResultForListOfAllProjects = _mapper.Map<List<ProjectViewModel>>(projects);
 

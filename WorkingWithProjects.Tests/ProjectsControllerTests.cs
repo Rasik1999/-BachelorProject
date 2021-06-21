@@ -4,6 +4,7 @@ using Moq;
 using NUnit.Framework;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using WorkingWithProjects.API.Controllers;
 using WorkingWithProjects.API.Helpers;
 using WorkingWithProjects.API.Models;
@@ -33,9 +34,9 @@ namespace WorkingWithProjects.Tests
             mockMapper = new Mock<IMapper>();
             mockProjectsHelper = new Mock<IProjectsHelper>();
 
-            mockProjectRepository.Setup(x => x.GetAllProjects()).Returns(listOfProjects);
+            mockProjectRepository.Setup(x => x.GetAllProjects()).ReturnsAsync(listOfProjects);
             mockProjectRepository.Setup(x => x.GetAllModeratedProjects()).Returns(listOfProjects);
-            mockProjectRepository.Setup(x => x.GetProjectById(It.IsAny<int>())).Returns(listOfProjects.FirstOrDefault());
+            mockProjectRepository.Setup(x => x.GetProjectById(It.IsAny<int>())).ReturnsAsync(listOfProjects.FirstOrDefault());
             mockMapper.Setup(x => x.Map<List<ProjectViewModel>>(It.IsAny<List<Project>>())).Returns(listOfProjectViewModels);
             mockMapper.Setup(x => x.Map<ProjectViewModel>(It.IsAny<Project>())).Returns(listOfProjectViewModels.FirstOrDefault());
             mockProgressRepository.Setup(x => x.GetProgressByProjectId(It.IsAny<int>())).Returns(() => null);
@@ -48,9 +49,9 @@ namespace WorkingWithProjects.Tests
         }
 
         [Test]
-        public void ProjectController_Get_ReturnsList_Passed()
+        public async Task ProjectController_Get_ReturnsList_PassedAsync()
         {
-            OkObjectResult actual = projectController.GetAllProjects() as OkObjectResult;
+            OkObjectResult actual = await projectController.GetAllProjectsAsync() as OkObjectResult;
 
             Assert.IsTrue(actual.Value != null);
             Assert.IsTrue((actual.Value as List<ProjectViewModel>).Count == listOfProjectViewModels.Count);

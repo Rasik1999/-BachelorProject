@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using WorkingWithProjects.DATA;
 
 namespace WorkingWithProjects.API.Models
@@ -14,12 +15,12 @@ namespace WorkingWithProjects.API.Models
             _context = context;
         }
 
-        public Project AddProject(Project project)
+        public async Task<Project> AddProject(Project project)
         {
             Validate(project);
 
             var addedEntity = _context.Projects.Add(project);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return addedEntity.Entity;
         }
 
@@ -40,33 +41,33 @@ namespace WorkingWithProjects.API.Models
             }
         }
 
-        public Project DeleteProject(int projectId)
+        public async Task<Project> DeleteProject(int projectId)
         {
             var foundedProject = _context.Projects.FirstOrDefault(e => e.ProjectId == projectId);
             if (foundedProject == null) return null;
 
             var result = _context.Projects.Remove(foundedProject);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
             return result.Entity;
         }
 
-        public IEnumerable<Project> GetAllProjects()
+        public async Task<IEnumerable<Project>> GetAllProjects()
         {
             return _context.Projects;
         }
 
-        public Project GetProjectById(int projectId)
+        public async Task<Project> GetProjectById(int projectId)
         {
             return _context.Projects.FirstOrDefault(x => x.ProjectId == projectId);
         }
 
-        public Project GetProjectsByUserId(string userId)
+        public async Task<Project> GetProjectsByUserId(string userId)
         {
             return _context.Projects.FirstOrDefault(x => string.Equals(x.UserId, userId));
         }
 
-        public Project UpdateProject(Project project)
+        public async Task<Project> UpdateProject(Project project)
         {
             var foundedProject = _context.Projects.FirstOrDefault(e => e.ProjectId == project.ProjectId);
 
