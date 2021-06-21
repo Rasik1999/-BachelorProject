@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using WorkingWithProjects.DATA;
 
 namespace WorkingWithProjects.API.Models
@@ -24,11 +25,11 @@ namespace WorkingWithProjects.API.Models
             return result;
         }
 
-        public Progress CreateProgress(int projectId, decimal value)
+        public async Task<Progress> CreateProgress(int projectId, decimal value)
         {
             Progress newProgress = new Progress() { ProjectId = projectId, DesiredValue = value };
 
-            var result = _context.Progresses.Add(newProgress).Entity;
+            var result = (await _context.Progresses.AddAsync(newProgress)).Entity;
 
             _context.SaveChanges();
 
@@ -45,9 +46,9 @@ namespace WorkingWithProjects.API.Models
             return _context.Progresses.FirstOrDefault(x => x.ProgressId == progressId);
         }
 
-        public Progress GetProgressByProjectId(int projectId)
+        public async Task<Progress> GetProgressByProjectId(int projectId)
         {
-            return _context.Progresses.FirstOrDefault(x => x.ProjectId == projectId);
+            return await _context.Progresses.FindAsync(projectId);
         }
 
         public Progress UpdateProgress(Progress progress)

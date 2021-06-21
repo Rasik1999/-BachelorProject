@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,12 +35,12 @@ namespace WorkingWithProjects.API.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAllProjectsAsync()
+        public async Task<IActionResult> GetAllProjectsAsync()
         {
-            var projects = _projectRepository.GetAllProjects().ToList();
+            var projects = (await _projectRepository.GetAllProjects()).ToList();
             var result = _mapper.Map<List<ProjectViewModel>>(projects);
 
-            _projectsHelper.MappingForProjectViewModel(result);
+            await _projectsHelper.MappingForProjectViewModelAsync(result);
 
             return Ok(result);
         }
@@ -50,7 +51,7 @@ namespace WorkingWithProjects.API.Controllers
             var projects = _projectRepository.GetAllModeratedProjects().ToList();
             var result = _mapper.Map<List<ProjectViewModel>>(projects);
 
-            _projectsHelper.MappingForProjectViewModel(result);
+            _projectsHelper.MappingForProjectViewModelAsync(result);
 
             return Ok(result);
         }
@@ -61,7 +62,7 @@ namespace WorkingWithProjects.API.Controllers
             var projects = _projectRepository.GetAllUnmoderatedProjects().ToList();
             var result = _mapper.Map<List<ProjectViewModel>>(projects);
 
-            _projectsHelper.MappingForProjectViewModel(result);
+            _projectsHelper.MappingForProjectViewModelAsync(result);
 
             return Ok(result);
         }
@@ -72,13 +73,13 @@ namespace WorkingWithProjects.API.Controllers
             var projects = _projectRepository.GetProjectById(id);
             var result = _mapper.Map<ProjectViewModel>(projects);
 
-            _projectsHelper.MappingForProjectViewModel(new List<ProjectViewModel> { result });
+            _projectsHelper.MappingForProjectViewModelAsync(new List<ProjectViewModel> { result });
 
             return Ok(result);
         }
 
         [HttpGet("bestprojects/{projectId}")]
-        public IActionResult GetBestProjectsAsync(int projectId)
+        public async Task<IActionResult> GetBestProjectsAsync(int projectId)
         {
             var project = _projectRepository.GetProjectById(projectId);
 
@@ -87,17 +88,17 @@ namespace WorkingWithProjects.API.Controllers
 
             var mapResult = _mapper.Map<ProjectViewModel>(project);
 
-            _projectsHelper.MappingForProjectViewModel(new List<ProjectViewModel> { mapResult });
+            var bestProjects = await _projectsHelper.MappingForProjectViewModelAsync(new List<ProjectViewModel> { mapResult });
 
-            var bestProjects = _projectsHelper.FindBestProjects(mapResult);
+            bestProjects = await _projectsHelper.FindBestProjectsAsync(mapResult);
 
             return Ok(bestProjects);
         }
 
         [HttpGet("projectsforcategory/{categoryId}")]
-        public  IActionResult GetProjectsForCategoryAsync(int categoryId)
+        public async Task<IActionResult> GetProjectsForCategoryAsync(int categoryId)
         {
-            var projects = _projectRepository.GetAllProjects();
+            var projects = await _projectRepository.GetAllProjects();
             projects = projects.Where(x => x.KindOfProjectId == categoryId);
 
             if (projects is null)
@@ -105,7 +106,7 @@ namespace WorkingWithProjects.API.Controllers
 
             var mapResult = _mapper.Map<List<ProjectViewModel>>(projects);
 
-            _projectsHelper.MappingForProjectViewModel(mapResult);
+            await _projectsHelper.MappingForProjectViewModelAsync(mapResult);
 
             mapResult = mapResult.OrderByDescending(x => x.PercentageOfCompletion).ToList();
 
@@ -113,32 +114,32 @@ namespace WorkingWithProjects.API.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreateProjectAsync([FromBody] ProjectProgressViewModel projectViewModel)
+        public async Task<IActionResult> CreateProjectAsync([FromBody] ProjectProgressViewModel projectViewModel)
         {
             var project = _mapper.Map<Project>(projectViewModel);
-            var addedProject = _projectRepository.AddProject(project);
-            //_progressRepository.CreateProgress(project.ProjectId, projectViewModel.DesiredValue);
+            var addedProject = await _projectRepository.AddProject(project);
+            await _progressRepository.CreateProgress(project.ProjectId, projectViewModel.DesiredValue);
 
             var result = _mapper.Map<ProjectViewModel>(addedProject);
 
-            _projectsHelper.MappingForProjectViewModel(new List<ProjectViewModel> { result });
+            _projectsHelper.MappingForProjectViewModelAsync(new List<ProjectViewModel> { result });
 
             return Ok(result);
         }
 
         [HttpPut("{id}")]
-        public IActionResult PutProjectAsync(int id, [FromBody] ProjectProgressViewModel projectViewModel)
+        public async Task<IActionResult> PutProjectAsync(int id, [FromBody] ProjectProgressViewModel projectViewModel)
         {
             var project = _mapper.Map<Project>(projectViewModel);
             project.ProjectId = id;
             var addedProject = _projectRepository.UpdateProject(project);
-            var progress = _progressRepository.GetProgressByProjectId(addedProject.ProjectId);
+            var progress = await _progressRepository.GetProgressByProjectId(addedProject.ProjectId);
             progress.DesiredValue = projectViewModel.DesiredValue;
             _progressRepository.UpdateProgress(progress);
 
             var result = _mapper.Map<ProjectViewModel>(addedProject);
 
-            _projectsHelper.MappingForProjectViewModel(new List<ProjectViewModel> { result });
+            _projectsHelper.MappingForProjectViewModelAsync(new List<ProjectViewModel> { result });
 
             return Ok(result);
         }

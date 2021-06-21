@@ -25,10 +25,10 @@ namespace WorkingWithProjects.Tests
             mockNotificationService = new Mock<INotificationService>();
             mockProgressRepository.Setup(x => x.GetAllProgress()).Returns(listOfProgress);
             mockProgressRepository.Setup(x => x.GetProgressById(1)).Returns(new Progress { ProgressId = 1, DesiredValue = progressValue });
-            mockProgressRepository.Setup(x => x.CreateProgress(It.IsAny<int>(), It.IsAny<decimal>())).Returns(new Progress { DesiredValue = progressValue });
+            mockProgressRepository.Setup(x => x.CreateProgress(It.IsAny<int>(), It.IsAny<decimal>())).ReturnsAsync(new Progress { DesiredValue = progressValue });
             mockProgressRepository.Setup(x => x.UpdateProgress(It.IsAny<Progress>())).Returns(new Progress { DesiredValue = progressValue });
             mockProgressRepository.Setup(x => x.DeletePogress(It.IsAny<int>())).Returns(new Progress { DesiredValue = progressValue });
-            mockProgressRepository.Setup(x => x.GetProgressByProjectId(It.IsAny<int>())).Returns(new Progress { DesiredValue = progressValue });
+            mockProgressRepository.Setup(x => x.GetProgressByProjectId(It.IsAny<int>())).ReturnsAsync(new Progress { DesiredValue = progressValue });
             progressController = new ProgressController(mockProgressRepository.Object, mockNotificationService.Object);
         }
 
@@ -51,18 +51,18 @@ namespace WorkingWithProjects.Tests
         }
 
         [Test]
-        public void ProgressController_GetWithProjectId_ReturnsProgress_Passed()
+        public async System.Threading.Tasks.Task ProgressController_GetWithProjectId_ReturnsProgress_PassedAsync()
         {
-            var actual = progressController.GetByProjectId(1);
+            var actual = await progressController.GetByProjectIdAsync(1);
 
             Assert.IsTrue(actual != null);
             Assert.AreEqual(progressValue, actual.DesiredValue);
         }
 
         [Test]
-        public void ProgressController_Put_ReturnsProgress_Passed()
+        public async System.Threading.Tasks.Task ProgressController_Put_ReturnsProgress_PassedAsync()
         {
-            var actual = progressController.Put(1, progressValue);
+            var actual = await progressController.PutAsync(1, progressValue);
 
             Assert.IsTrue(actual != null);
             Assert.AreEqual(progressValue, actual.DesiredValue);

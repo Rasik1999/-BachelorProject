@@ -15,11 +15,11 @@ namespace WorkingWithProjects.API.Models
             _context = context;
         }
 
-        public Project AddProject(Project project)
+        public async Task<Project> AddProject(Project project)
         {
             Validate(project);
 
-            var addedEntity = _context.Projects.Add(project);
+            var addedEntity = await _context.Projects.AddAsync(project);
             _context.SaveChanges();
             return addedEntity.Entity;
         }
@@ -52,14 +52,14 @@ namespace WorkingWithProjects.API.Models
             return result.Entity;
         }
 
-        public IEnumerable<Project> GetAllProjects()
+        public async Task<IEnumerable<Project>> GetAllProjects()
         {
-            return _context.Projects;
+            return await Task.FromResult(_context.Projects);
         }
 
         public Project GetProjectById(int projectId)
         {
-            return  _context.Projects.Find(projectId);
+            return  _context.Projects.Where(x => x.ProjectId == projectId).FirstOrDefault();
         }
 
         public Project GetProjectsByUserId(string userId)

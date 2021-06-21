@@ -15,5 +15,6 @@
         public string UserId { get; set; }
 
         public decimal DesiredValue { get; set; }
+        public string AuthorName { get; set; }
     }
 }

@@ -30,12 +30,12 @@ namespace WorkingWithProjects.API.Helpers
             _mapper = mapper;
         }
 
-        public List<ProjectViewModel> MappingForProjectViewModel(List<ProjectViewModel> projectViewModels)
+        public async Task<List<ProjectViewModel>> MappingForProjectViewModelAsync(List<ProjectViewModel> projectViewModels)
         {
             foreach (var item in projectViewModels)
             {
                 //Adding progress values
-                var progress = _progressRepository.GetProgressByProjectId(item.ProjectId);
+                var progress = await _progressRepository.GetProgressByProjectId(item.ProjectId);
 
                 if (progress != null)
                 {
@@ -70,13 +70,13 @@ namespace WorkingWithProjects.API.Helpers
             return projectViewModels;
         }
 
-        public List<ProjectViewModel> FindBestProjects(ProjectViewModel mapResult)
+        public async Task<List<ProjectViewModel>> FindBestProjectsAsync(ProjectViewModel mapResult)
         {
-            var projects = _projectRepository.GetAllProjects().ToList();
+            var projects = (await _projectRepository.GetAllProjects()).ToList();
 
             var mapResultForListOfAllProjects = _mapper.Map<List<ProjectViewModel>>(projects);
 
-            MappingForProjectViewModel(mapResultForListOfAllProjects);
+            await MappingForProjectViewModelAsync(mapResultForListOfAllProjects);
 
             Dictionary<ProjectViewModel, int> projectsDictionary = new Dictionary<ProjectViewModel, int>();
 

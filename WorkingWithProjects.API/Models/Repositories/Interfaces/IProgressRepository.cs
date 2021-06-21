@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using WorkingWithProjects.DATA;
 
 namespace WorkingWithProjects.API.Models
@@ -7,10 +8,10 @@ namespace WorkingWithProjects.API.Models
     {
         IEnumerable<Progress> GetAllProgress();
         Progress GetProgressById(int progressId);
-        Progress GetProgressByProjectId(int projectId);
+        Task<Progress> GetProgressByProjectId(int projectId);
         Progress UpdateProgress(Progress progress);
         Progress CreateBlankProgress(int projectId);
-        Progress CreateProgress(int projectId, decimal value);
+        Task<Progress> CreateProgress(int projectId, decimal value);
         Progress DeletePogress(int id);
     }
 }

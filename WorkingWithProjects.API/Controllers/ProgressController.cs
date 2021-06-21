@@ -37,16 +37,16 @@ namespace WorkingWithProjects.API.Controllers
 
         // GET api/<ProgressController>/ByProjectId5
         [HttpGet("byprojectid/{id}")]
-        public Progress GetByProjectId(int id)
+        public async System.Threading.Tasks.Task<Progress> GetByProjectIdAsync(int id)
         {
-            return _progressRepository.GetProgressByProjectId(id);
+            return await _progressRepository.GetProgressByProjectId(id);
         }
 
         // GET api/<ProgressController>/5
         [HttpPut("projectId")]
-        public Progress Put(int projectId, [FromBody] decimal value)
+        public async System.Threading.Tasks.Task<Progress> PutAsync(int projectId, [FromBody] decimal value)
         {
-            var progress = _progressRepository.GetProgressByProjectId(projectId);
+            var progress = await _progressRepository.GetProgressByProjectId(projectId);
             progress.Value += value;
 
             UpdatePercentage(progress);
