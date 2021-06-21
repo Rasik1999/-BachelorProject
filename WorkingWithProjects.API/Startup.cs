@@ -60,9 +60,7 @@ namespace WorkingWithProjects.API
                 options.AddPolicy("CorsPolicy",
                     builder => builder.AllowAnyOrigin()
                         .AllowAnyMethod()
-                        .AllowAnyHeader()
-                        .AllowCredentials()
-                );
+                        .AllowAnyHeader());
             });
 
             services.AddControllers().AddNewtonsoftJson(o =>
