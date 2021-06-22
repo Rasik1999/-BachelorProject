@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WorkingWithProjects.DATA;
@@ -29,9 +31,9 @@ namespace WorkingWithProjects.API.Models
         {
             Progress newProgress = new Progress() { ProjectId = projectId, DesiredValue = value };
 
-            var result = (await _context.Progresses.AddAsync(newProgress)).Entity;
+            var result = _context.Progresses.Add(newProgress).Entity;
 
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
             return result;
         }
@@ -46,9 +48,18 @@ namespace WorkingWithProjects.API.Models
             return _context.Progresses.FirstOrDefault(x => x.ProgressId == progressId);
         }
 
-        public async Task<Progress> GetProgressByProjectId(int projectId)
+        public async Task<Progress> GetProgressByProjectIdAsync(int projectId)
         {
-            return await _context.Progresses.FindAsync(projectId);
+            try
+            {
+                var something = await _context.Progresses.FirstOrDefaultAsync(x => x.ProjectId == projectId);
+                return something;
+            }
+            catch (Exception ex)
+            {
+                _ = ex.Message;
+                return await Task.FromResult(new Progress());
+            }
         }
 
         public Progress UpdateProgress(Progress progress)

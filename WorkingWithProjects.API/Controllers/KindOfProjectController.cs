@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using WorkingWithProjects.API.Models;
 using WorkingWithProjects.DATA;
 
@@ -26,9 +27,9 @@ namespace WorkingWithProjects.API.Controllers
 
         // GET api/<KindOfProjectController>/5
         [HttpGet("{id}")]
-        public KindOfProject Get(int id)
+        public async Task<KindOfProject> GetAsync(int id)
         {
-            return _kindOfProjectRepository.GetKindById(id);
+            return await _kindOfProjectRepository.GetKindById(id);
         }
 
         [HttpPut]

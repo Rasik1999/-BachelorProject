@@ -26,7 +26,7 @@ namespace WorkingWithProjects.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<ContextDB>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")), ServiceLifetime.Scoped);
 
             services.AddScoped<IKindOfProjectRepository, KindOfProjectRepository>();
             services.AddScoped<IProgressRepository, ProgressRepository>();

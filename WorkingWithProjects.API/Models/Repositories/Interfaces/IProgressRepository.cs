@@ -8,7 +8,7 @@ namespace WorkingWithProjects.API.Models
     {
         IEnumerable<Progress> GetAllProgress();
         Progress GetProgressById(int progressId);
-        Task<Progress> GetProgressByProjectId(int projectId);
+        Task<Progress> GetProgressByProjectIdAsync(int projectId);
         Progress UpdateProgress(Progress progress);
         Progress CreateBlankProgress(int projectId);
         Task<Progress> CreateProgress(int projectId, decimal value);

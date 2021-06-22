@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using WorkingWithProjects.API.Models;
 using WorkingWithProjects.API.Models.ViewModel;
+using WorkingWithProjects.DATA;
 
 namespace WorkingWithProjects.API.Helpers
 {
@@ -35,7 +36,15 @@ namespace WorkingWithProjects.API.Helpers
             foreach (var item in projectViewModels)
             {
                 //Adding progress values
-                var progress = await _progressRepository.GetProgressByProjectId(item.ProjectId);
+                Progress progress = new Progress();
+                try
+                {
+                    progress = await _progressRepository.GetProgressByProjectIdAsync(item.ProjectId);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
 
                 if (progress != null)
                 {
@@ -52,7 +61,7 @@ namespace WorkingWithProjects.API.Helpers
                 {
                     ids.Sort();
 
-                    var hashtags = _hashtagRepository.GetHashtagsByIds(ids.First(), ids.Last());
+                    var hashtags = await _hashtagRepository.GetHashtagsByIds(ids.First(), ids.Last());
 
                     if (hashtags != null)
                     {
@@ -64,7 +73,7 @@ namespace WorkingWithProjects.API.Helpers
                 }
 
                 //Adding KindOfProject name
-                item.KindOfProjectName = _kindOfProjectRepository.GetKindById(item.KindOfProjectId).Name;
+                item.KindOfProjectName = (await _kindOfProjectRepository.GetKindById(item.KindOfProjectId)).Name;
             }
 
             return projectViewModels;

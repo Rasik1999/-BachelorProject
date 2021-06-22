@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -38,9 +39,9 @@ namespace WorkingWithProjects.API.Models
             return _context.Hashtags;
         }
 
-        public IEnumerable<Hashtag> GetHashtagsByIds(int minId, int maxId)
+        public async Task<List<Hashtag>> GetHashtagsByIds(int minId, int maxId)
         {
-            return _context.Hashtags.Where(x => x.HashtagId >= minId && x.HashtagId <= maxId);
+            return await _context.Hashtags.Where(x => x.HashtagId >= minId && x.HashtagId <= maxId).ToListAsync();
         }
 
         public Hashtag GetHashtagById(int hashtagId)

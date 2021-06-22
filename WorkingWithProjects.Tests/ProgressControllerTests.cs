@@ -28,7 +28,7 @@ namespace WorkingWithProjects.Tests
             mockProgressRepository.Setup(x => x.CreateProgress(It.IsAny<int>(), It.IsAny<decimal>())).ReturnsAsync(new Progress { DesiredValue = progressValue });
             mockProgressRepository.Setup(x => x.UpdateProgress(It.IsAny<Progress>())).Returns(new Progress { DesiredValue = progressValue });
             mockProgressRepository.Setup(x => x.DeletePogress(It.IsAny<int>())).Returns(new Progress { DesiredValue = progressValue });
-            mockProgressRepository.Setup(x => x.GetProgressByProjectId(It.IsAny<int>())).ReturnsAsync(new Progress { DesiredValue = progressValue });
+            mockProgressRepository.Setup(x => x.GetProgressByProjectIdAsync(It.IsAny<int>())).ReturnsAsync(new Progress { DesiredValue = progressValue });
             progressController = new ProgressController(mockProgressRepository.Object, mockNotificationService.Object);
         }
 

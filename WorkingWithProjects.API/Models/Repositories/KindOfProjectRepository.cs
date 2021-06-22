@@ -1,6 +1,8 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using WorkingWithProjects.DATA;
 
 namespace WorkingWithProjects.API.Models
@@ -62,9 +64,9 @@ namespace WorkingWithProjects.API.Models
             return _context.KindsOfProject.Where(x => x.KindOfProjectRoles.Where(y => y.RoleId == roleId) != null);
         }
 
-        public KindOfProject GetKindById(int kindId)
+        public async Task<KindOfProject> GetKindById(int kindId)
         {
-            return _context.KindsOfProject.FirstOrDefault(x => x.KindOfProjectId == kindId);
+            return await _context.KindsOfProject.FirstOrDefaultAsync(x => x.KindOfProjectId == kindId);
         }
 
         public KindOfProject UpdateKind(KindOfProject kind)

@@ -9,7 +9,7 @@ namespace WorkingWithProjects.API.Models
         Task<IEnumerable<Project>> GetAllProjects();
         IEnumerable<Project> GetAllModeratedProjects();
         IEnumerable<Project> GetAllUnmoderatedProjects();
-        Project GetProjectById(int projectId);
+        Task<Project> GetProjectById(int projectId);
         Project GetProjectsByUserId(string userId);
         Task<Project> AddProject(Project project);
         Project UpdateProject(Project project);

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -20,7 +21,7 @@ namespace WorkingWithProjects.API.Models
             Validate(project);
 
             var addedEntity = await _context.Projects.AddAsync(project);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return addedEntity.Entity;
         }
 
@@ -57,9 +58,9 @@ namespace WorkingWithProjects.API.Models
             return await Task.FromResult(_context.Projects);
         }
 
-        public Project GetProjectById(int projectId)
+        public async Task<Project> GetProjectById(int projectId)
         {
-            return  _context.Projects.Where(x => x.ProjectId == projectId).FirstOrDefault();
+            return  await _context.Projects.Where(x => x.ProjectId == projectId).FirstOrDefaultAsync();
         }
 
         public Project GetProjectsByUserId(string userId)

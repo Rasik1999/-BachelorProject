@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using WorkingWithProjects.API.Models;
 using WorkingWithProjects.API.Services;
 using WorkingWithProjects.DATA;
@@ -37,16 +38,16 @@ namespace WorkingWithProjects.API.Controllers
 
         // GET api/<ProgressController>/ByProjectId5
         [HttpGet("byprojectid/{id}")]
-        public async System.Threading.Tasks.Task<Progress> GetByProjectIdAsync(int id)
+        public async Task<Progress> GetByProjectIdAsync(int id)
         {
-            return await _progressRepository.GetProgressByProjectId(id);
+            return await _progressRepository.GetProgressByProjectIdAsync(id);
         }
 
         // GET api/<ProgressController>/5
         [HttpPut("projectId")]
-        public async System.Threading.Tasks.Task<Progress> PutAsync(int projectId, [FromBody] decimal value)
+        public async Task<Progress> PutAsync(int projectId, [FromBody] decimal value)
         {
-            var progress = await _progressRepository.GetProgressByProjectId(projectId);
+            var progress = await _progressRepository.GetProgressByProjectIdAsync(projectId);
             progress.Value += value;
 
             UpdatePercentage(progress);
