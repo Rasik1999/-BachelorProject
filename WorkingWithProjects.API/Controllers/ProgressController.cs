@@ -44,7 +44,7 @@ namespace WorkingWithProjects.API.Controllers
         }
 
         // GET api/<ProgressController>/5
-        [HttpPut("projectId")]
+        [HttpPost("projectId")]
         public async Task<Progress> PutAsync(int projectId, [FromBody] decimal value)
         {
             var progress = await _progressRepository.GetProgressByProjectIdAsync(projectId);
