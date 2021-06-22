@@ -127,6 +127,23 @@ namespace WorkingWithProjects.API.Controllers
             return Ok(mapResult);
         }
 
+        [HttpGet("projectsforuser/{userId}")]
+        public async Task<IActionResult> GetProjectsForUserAsync(string userId)
+        {
+            var projects = _projectRepository.GetProjectsByUserId(userId);
+
+            if (projects is null)
+                return BadRequest("Current projects is null");
+
+            var mapResult = _mapper.Map<List<ProjectViewModel>>(projects);
+
+            await _projectsHelper.MappingForProjectViewModelAsync(mapResult);
+
+            mapResult = mapResult.OrderByDescending(x => x.PercentageOfCompletion).ToList();
+
+            return Ok(mapResult);
+        }
+
         [HttpPost]
         public async Task<IActionResult> CreateProjectAsync([FromBody] ProjectProgressViewModel projectViewModel)
         {

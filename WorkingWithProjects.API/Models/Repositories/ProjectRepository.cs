@@ -63,9 +63,9 @@ namespace WorkingWithProjects.API.Models
             return  await _context.Projects.Where(x => x.ProjectId == projectId).FirstOrDefaultAsync();
         }
 
-        public Project GetProjectsByUserId(string userId)
+        public List<Project> GetProjectsByUserId(string userId)
         {
-            return _context.Projects.FirstOrDefault(x => string.Equals(x.UserId, userId));
+            return _context.Projects.Where(x => string.Equals(x.UserId, userId)).ToList();
         }
 
         public Project UpdateProject(Project project)
